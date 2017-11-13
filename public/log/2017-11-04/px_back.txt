@@ -1,0 +1,11 @@
+
+2017--11-04 17:21:29{"client_trans_id":"20171104163957","resp_code":"PAY_FAILURE","resp_msg":"\u5931\u8d25","sign":"F3BrkczqvEVaBFjii0lP7j6xsxxqI5HWOweCXYrl2Kq8hjriMS2KmxPhY1\/uVGydbMfpwjSJvD+hSEEDuUml7sUjxCJyveuqN8\/fJXdf5nRzwtT3fuhkqHLqRgEz6kkwc2U6A66jI0CpHnLe54IzIPMgHmefd6M+UnGqGb9ggzU="}
+2017--11-04 17:21:29签名失败
+2017--11-04 17:22:29{"client_trans_id":"20171104163957","resp_code":"PAY_FAILURE","resp_msg":"\u5931\u8d25","sign":"F3BrkczqvEVaBFjii0lP7j6xsxxqI5HWOweCXYrl2Kq8hjriMS2KmxPhY1\/uVGydbMfpwjSJvD+hSEEDuUml7sUjxCJyveuqN8\/fJXdf5nRzwtT3fuhkqHLqRgEz6kkwc2U6A66jI0CpHnLe54IzIPMgHmefd6M+UnGqGb9ggzU="}
+2017--11-04 17:22:29签名失败
+2017--11-04 17:23:30{"client_trans_id":"20171104163957","resp_code":"PAY_FAILURE","resp_msg":"\u5931\u8d25","sign":"F3BrkczqvEVaBFjii0lP7j6xsxxqI5HWOweCXYrl2Kq8hjriMS2KmxPhY1\/uVGydbMfpwjSJvD+hSEEDuUml7sUjxCJyveuqN8\/fJXdf5nRzwtT3fuhkqHLqRgEz6kkwc2U6A66jI0CpHnLe54IzIPMgHmefd6M+UnGqGb9ggzU="}
+2017--11-04 17:23:30签名失败
+2017--11-04 17:24:30{"client_trans_id":"20171104163957","resp_code":"PAY_FAILURE","resp_msg":"\u5931\u8d25","sign":"F3BrkczqvEVaBFjii0lP7j6xsxxqI5HWOweCXYrl2Kq8hjriMS2KmxPhY1\/uVGydbMfpwjSJvD+hSEEDuUml7sUjxCJyveuqN8\/fJXdf5nRzwtT3fuhkqHLqRgEz6kkwc2U6A66jI0CpHnLe54IzIPMgHmefd6M+UnGqGb9ggzU="}
+2017--11-04 17:24:30签名失败
+2017--11-04 17:25:30{"client_trans_id":"20171104163957","resp_code":"PAY_FAILURE","resp_msg":"\u5931\u8d25","sign":"F3BrkczqvEVaBFjii0lP7j6xsxxqI5HWOweCXYrl2Kq8hjriMS2KmxPhY1\/uVGydbMfpwjSJvD+hSEEDuUml7sUjxCJyveuqN8\/fJXdf5nRzwtT3fuhkqHLqRgEz6kkwc2U6A66jI0CpHnLe54IzIPMgHmefd6M+UnGqGb9ggzU="}
+2017--11-04 17:25:30签名失败

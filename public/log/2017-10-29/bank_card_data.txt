@@ -1,0 +1,2 @@
+
+2017--10-29 22:08:42{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"4100 6260 2222 6333","cardtype":"\u501f\u8bb0\u5361","cardname":"\u62db\u5546\u94f6\u884c"},"ordersign":"201710292208371371453555655"}

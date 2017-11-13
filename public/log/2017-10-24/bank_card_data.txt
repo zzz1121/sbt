@@ -1,0 +1,49 @@
+
+2017--10-24 10:48:51{"status":"0","msg":"ok","result":{"number":"6226890066073965","type":"\u8d37\u8bb0\u5361","bankname":"\u4e2d\u4fe1\u94f6\u884c","bankno":"03020000"}}
+2017--10-24 10:49:27{"status":"0","msg":"ok","result":{"number":"6226890066073965","type":"\u8d37\u8bb0\u5361","bankname":"\u4e2d\u4fe1\u94f6\u884c","bankno":"03020000"}}
+2017--10-24 10:50:39{"status":"0","msg":"ok","result":{"number":"6226852010033552","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u94f6\u884c","bankno":"63030000"}}
+2017--10-24 11:27:01{"status":"0","msg":"ok","result":{"number":"6226552163946754","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 11:27:18{"status":"0","msg":"ok","result":{"number":"6226552163946754","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 11:31:07
+2017--10-24 11:34:58{"status":"0","msg":"ok","result":{"number":"6226552163946754","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 11:35:48{"status":"0","msg":"ok","result":{"number":"6226552163946754","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 11:36:30{"status":"0","msg":"ok","result":{"number":"6226552163946754","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 11:37:08{"status":"0","msg":"ok","result":{"number":"6226552163946754","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 11:47:26{"status":"0","msg":"ok","result":{"number":"6226552163946754","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 11:48:56{"status":"0","msg":"ok","result":{"number":"6226552163946754","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 11:57:13{"status":"0","msg":"ok","result":{"number":"6226552163946754","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 12:47:44{"status":"0","msg":"ok","result":{"number":"6225768769374974","type":"\u8d37\u8bb0\u5361","bankname":"\u62db\u5546\u94f6\u884c","bankno":"03080000"}}
+2017--10-24 12:48:02{"status":"0","msg":"ok","result":{"number":"6225768769374974","type":"\u8d37\u8bb0\u5361","bankname":"\u62db\u5546\u94f6\u884c","bankno":"03080000"}}
+2017--10-24 12:53:25{"status":"0","msg":"ok","result":{"number":"6226552163946764","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 13:17:54{"status":"0","msg":"ok","result":{"number":"6225768769374974","type":"\u8d37\u8bb0\u5361","bankname":"\u62db\u5546\u94f6\u884c","bankno":"03080000"}}
+2017--10-24 13:47:31{"status":"0","msg":"ok","result":{"number":"6226552163946754","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 13:48:23{"status":"0","msg":"ok","result":{"number":"6226552163946754","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 13:49:53{"status":"0","msg":"ok","result":{"number":"6225768769374974","type":"\u8d37\u8bb0\u5361","bankname":"\u62db\u5546\u94f6\u884c","bankno":"03080000"}}
+2017--10-24 14:25:12{"status":"0","msg":"ok","result":{"number":"6226552163946754","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 14:25:29{"status":"0","msg":"ok","result":{"number":"6226552163946754","type":"\u8d37\u8bb0\u5361","bankname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3","bankno":""}}
+2017--10-24 14:44:56{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"6226 5521 6394 6754","cardtype":"\u4fe1\u7528\u5361","cardname":"\u5149\u5927\u4fe1\u7528\u5361\u4e2d\u5fc3"},"ordersign":"201710241444551371455575055"}
+2017--10-24 14:45:56{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"622848 0078201162977","cardtype":"\u501f\u8bb0\u5361","cardname":"\u519c\u4e1a\u94f6\u884c"},"ordersign":"201710241445551371451515398"}
+2017--10-24 14:46:02{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"622848 0078201162977","cardtype":"\u501f\u8bb0\u5361","cardname":"\u519c\u4e1a\u94f6\u884c"},"ordersign":"201710241446021371497549998"}
+2017--10-24 14:46:08{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"6225 7687 6937 4974","cardtype":"\u4fe1\u7528\u5361","cardname":"\u62db\u5546\u94f6\u884c"},"ordersign":"201710241446051371410010156"}
+2017--10-24 14:46:18{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"622848 0078201162977","cardtype":"\u501f\u8bb0\u5361","cardname":"\u519c\u4e1a\u94f6\u884c"},"ordersign":"201710241446181371497539756"}
+2017--10-24 14:46:27{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"622848 0078201162977","cardtype":"\u501f\u8bb0\u5361","cardname":"\u519c\u4e1a\u94f6\u884c"},"ordersign":"201710241446271371451481015"}
+2017--10-24 15:04:26{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"622848 0078201162977","cardtype":"\u501f\u8bb0\u5361","cardname":"\u519c\u4e1a\u94f6\u884c"},"ordersign":"201710241504251371457975754"}
+2017--10-24 15:05:01{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"622848 0078201162977","cardtype":"\u501f\u8bb0\u5361","cardname":"\u519c\u4e1a\u94f6\u884c"},"ordersign":"201710241505001371499505051"}
+2017--10-24 15:06:46{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"622848 0078201162977","cardtype":"\u501f\u8bb0\u5361","cardname":"\u519c\u4e1a\u94f6\u884c"},"ordersign":"201710241506451371453514857"}
+2017--10-24 15:10:10{"error_code":80031,"reason":"\u8bc6\u522b\u5931\u8d25,\u8bf7\u7a0d\u5019\u518d\u8bd5","ordersign":"201710241510061371410197551"}
+2017--10-24 15:10:43{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"6259 9600 2213 6451","cardtype":"\u4fe1\u7528\u5361","cardname":"\u519c\u4e1a\u94f6\u884c"},"ordersign":"201710241510391371410254541"}
+2017--10-24 15:15:51{"error_code":80031,"reason":"\u8bc6\u522b\u5931\u8d25,\u8bf7\u7a0d\u5019\u518d\u8bd5","ordersign":"201710241515491371453549755"}
+2017--10-24 15:16:17{"error_code":80031,"reason":"\u8bc6\u522b\u5931\u8d25,\u8bf7\u7a0d\u5019\u518d\u8bd5","ordersign":"201710241516151371410257485"}
+2017--10-24 15:16:41{"error_code":80031,"reason":"\u8bc6\u522b\u5931\u8d25,\u8bf7\u7a0d\u5019\u518d\u8bd5","ordersign":"201710241516391371455549753"}
+2017--10-24 15:17:05{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"6226 8900 6607 3965","cardtype":"\u4fe1\u7528\u5361","cardname":"\u4e2d\u4fe1\u94f6\u884c"},"ordersign":"201710241517041371448575652"}
+2017--10-24 15:18:20{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"6217 0018 2000 4982 470","cardtype":"\u501f\u8bb0\u5361","cardname":"\u5efa\u8bbe\u94f6\u884c"},"ordersign":"201710241518191371498579797"}
+2017--10-24 15:21:09{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"6226 8900 6607 3965","cardtype":"\u4fe1\u7528\u5361","cardname":"\u4e2d\u4fe1\u94f6\u884c"},"ordersign":"201710241521081371452101565"}
+2017--10-24 15:21:53{"error_code":80031,"reason":"\u8bc6\u522b\u5931\u8d25,\u8bf7\u7a0d\u5019\u518d\u8bd5","ordersign":"201710241521511371410249555"}
+2017--10-24 15:22:36{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"6226 9520 0003 3552","cardtype":"\u4fe1\u7528\u5361","cardname":"\u798f\u5efa\u6d77\u5ce1\u94f6\u884c"},"ordersign":"201710241522351371498525254"}
+2017--10-24 16:12:19{"error_code":80031,"reason":"\u8bc6\u522b\u5931\u8d25,\u8bf7\u7a0d\u5019\u518d\u8bd5","ordersign":"201710241612181371450499848"}
+2017--10-24 16:12:24{"error_code":80031,"reason":"\u8bc6\u522b\u5931\u8d25,\u8bf7\u7a0d\u5019\u518d\u8bd5","ordersign":"201710241612231371455985452"}
+2017--10-24 16:12:49{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"6268 1016 4465 9502","cardtype":"\u65e0\u6cd5\u8bc6\u522b","cardname":""},"ordersign":"201710241612481371448999798"}
+2017--10-24 16:14:11{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"6258 1016 4465 9502","cardtype":"\u4fe1\u7528\u5361","cardname":"\u5e7f\u53d1"},"ordersign":"201710241614101371450564854"}
+2017--10-24 19:36:37{"error_code":80031,"reason":"\u8bc6\u522b\u5931\u8d25,\u8bf7\u7a0d\u5019\u518d\u8bd5","ordersign":"201710241936361371452569948"}
+2017--10-24 19:36:44{"error_code":80031,"reason":"\u8bc6\u522b\u5931\u8d25,\u8bf7\u7a0d\u5019\u518d\u8bd5","ordersign":"201710241936431371498501009"}
+2017--10-24 19:37:38{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"4367 4800 8862 7578","cardtype":"\u4fe1\u7528\u5361","cardname":"\u5efa\u8bbe\u94f6\u884c"},"ordersign":"201710241937371371449505154"}

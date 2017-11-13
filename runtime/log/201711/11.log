@@ -1,0 +1,353 @@
+---------------------------------------------------------------
+[ 2017-11-11T12:08:26+08:00 ] ::1 ::1 GET /index2/orders/index.html
+[ info ] api.sbt.com/index2/orders/index.html [运行时间：0.207700s][吞吐率：4.81req/s] [内存消耗：4,583.20kb] [文件加载：60]
+[ info ] [ LANG ] /Applications/MAMP/htdocs/start/sbt/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index2',
+    1 => 'orders',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'api.sbt.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'referer' => 'http://api.sbt.com/index2/charge/index.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,en;q=0.6',
+  'cookie' => 'PHPSESSID=37c0f03de7441d0c1ba91f861c0b677a',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index2\controller\Orders->index[ /Applications/MAMP/htdocs/start/sbt/application/index2/controller/Orders.php ]
+[ info ] [ LOG ] INIT File
+[ error ] [10501]SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.grou_id' in 'where clause'[/Applications/MAMP/htdocs/start/sbt/thinkphp/library/think/db/Connection.php:388]
+---------------------------------------------------------------
+[ 2017-11-11T12:11:17+08:00 ] ::1 ::1 GET /index2/orders/index.html
+[ info ] api.sbt.com/index2/orders/index.html [运行时间：0.211743s][吞吐率：4.72req/s] [内存消耗：4,583.48kb] [文件加载：60]
+[ info ] [ LANG ] /Applications/MAMP/htdocs/start/sbt/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index2',
+    1 => 'orders',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'api.sbt.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'referer' => 'http://api.sbt.com/index2/charge/index.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,en;q=0.6',
+  'cookie' => 'PHPSESSID=37c0f03de7441d0c1ba91f861c0b677a',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index2\controller\Orders->index[ /Applications/MAMP/htdocs/start/sbt/application/index2/controller/Orders.php ]
+[ info ] [ LOG ] INIT File
+[ error ] [10501]SQLSTATE[42S22]: Column not found: 1054 Unknown column 'a.group_id' in 'where clause'[/Applications/MAMP/htdocs/start/sbt/thinkphp/library/think/db/Connection.php:388]
+---------------------------------------------------------------
+[ 2017-11-11T12:11:26+08:00 ] ::1 ::1 GET /index2/orders/index.html
+[ info ] api.sbt.com/index2/orders/index.html [运行时间：0.116145s][吞吐率：8.61req/s] [内存消耗：4,584.77kb] [文件加载：60]
+[ info ] [ LANG ] /Applications/MAMP/htdocs/start/sbt/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index2',
+    1 => 'orders',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'api.sbt.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'referer' => 'http://api.sbt.com/index2/charge/index.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,en;q=0.6',
+  'cookie' => 'PHPSESSID=37c0f03de7441d0c1ba91f861c0b677a',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index2\controller\Orders->index[ /Applications/MAMP/htdocs/start/sbt/application/index2/controller/Orders.php ]
+[ info ] [ LOG ] INIT File
+[ error ] [10501]SQLSTATE[42S22]: Column not found: 1054 Unknown column 'b.group_id' in 'where clause'[/Applications/MAMP/htdocs/start/sbt/thinkphp/library/think/db/Connection.php:388]
+---------------------------------------------------------------
+[ 2017-11-11T12:11:30+08:00 ] ::1 ::1 GET /index2/orders/index.html
+[ info ] api.sbt.com/index2/orders/index.html [运行时间：0.130385s][吞吐率：7.67req/s] [内存消耗：4,584.77kb] [文件加载：60]
+[ info ] [ LANG ] /Applications/MAMP/htdocs/start/sbt/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index2',
+    1 => 'orders',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'api.sbt.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'referer' => 'http://api.sbt.com/index2/charge/index.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,en;q=0.6',
+  'cookie' => 'PHPSESSID=37c0f03de7441d0c1ba91f861c0b677a',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index2\controller\Orders->index[ /Applications/MAMP/htdocs/start/sbt/application/index2/controller/Orders.php ]
+[ info ] [ LOG ] INIT File
+[ error ] [10501]SQLSTATE[42S22]: Column not found: 1054 Unknown column 'b.group_id' in 'where clause'[/Applications/MAMP/htdocs/start/sbt/thinkphp/library/think/db/Connection.php:388]
+---------------------------------------------------------------
+[ 2017-11-11T12:11:45+08:00 ] ::1 ::1 GET /index2/orders/index.html
+[ info ] api.sbt.com/index2/orders/index.html [运行时间：0.117253s][吞吐率：8.53req/s] [内存消耗：4,584.77kb] [文件加载：60]
+[ info ] [ LANG ] /Applications/MAMP/htdocs/start/sbt/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index2',
+    1 => 'orders',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'api.sbt.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'referer' => 'http://api.sbt.com/index2/charge/index.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,en;q=0.6',
+  'cookie' => 'PHPSESSID=37c0f03de7441d0c1ba91f861c0b677a',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index2\controller\Orders->index[ /Applications/MAMP/htdocs/start/sbt/application/index2/controller/Orders.php ]
+[ info ] [ LOG ] INIT File
+[ error ] [10501]SQLSTATE[42S22]: Column not found: 1054 Unknown column 'b.group_id' in 'where clause'[/Applications/MAMP/htdocs/start/sbt/thinkphp/library/think/db/Connection.php:388]
+---------------------------------------------------------------
+[ 2017-11-11T12:14:15+08:00 ] ::1 ::1 GET /index2/orders/index.html
+[ info ] api.sbt.com/index2/orders/index.html [运行时间：0.138935s][吞吐率：7.20req/s] [内存消耗：4,584.74kb] [文件加载：60]
+[ info ] [ LANG ] /Applications/MAMP/htdocs/start/sbt/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index2',
+    1 => 'orders',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'api.sbt.com',
+  'connection' => 'keep-alive',
+  'cache-control' => 'max-age=0',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'referer' => 'http://api.sbt.com/index2/charge/index.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,en;q=0.6',
+  'cookie' => 'PHPSESSID=37c0f03de7441d0c1ba91f861c0b677a',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index2\controller\Orders->index[ /Applications/MAMP/htdocs/start/sbt/application/index2/controller/Orders.php ]
+[ info ] [ LOG ] INIT File
+[ error ] [10501]SQLSTATE[42S22]: Column not found: 1054 Unknown column 'group_id' in 'where clause'[/Applications/MAMP/htdocs/start/sbt/thinkphp/library/think/db/Connection.php:388]
+---------------------------------------------------------------
+[ 2017-11-11T12:16:43+08:00 ] ::1 ::1 GET /index2/charge/index.html
+[ info ] api.sbt.com/index2/charge/index.html [运行时间：0.226441s][吞吐率：4.42req/s] [内存消耗：4,816.69kb] [文件加载：59]
+[ info ] [ LANG ] /Applications/MAMP/htdocs/start/sbt/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index2',
+    1 => 'charge',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'api.sbt.com',
+  'connection' => 'keep-alive',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'referer' => 'http://api.sbt.com/index2/personal/index.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,en;q=0.6',
+  'cookie' => 'PHPSESSID=37c0f03de7441d0c1ba91f861c0b677a',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index2\controller\Charge->index[ /Applications/MAMP/htdocs/start/sbt/application/index2/controller/Charge.php ]
+[ info ] [ VIEW ] /Applications/MAMP/htdocs/start/sbt/application/index2/view/charge/rate.html [ array (
+  0 => 'user_rate',
+  1 => 'rate',
+  2 => 'pay_id',
+) ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2017-11-11T12:16:46+08:00 ] ::1 ::1 GET /index2/brokerage/index.html
+[ info ] api.sbt.com/index2/brokerage/index.html [运行时间：0.127588s][吞吐率：7.84req/s] [内存消耗：4,784.84kb] [文件加载：59]
+[ info ] [ LANG ] /Applications/MAMP/htdocs/start/sbt/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index2',
+    1 => 'brokerage',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'api.sbt.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'referer' => 'http://api.sbt.com/index2/charge/index.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,en;q=0.6',
+  'cookie' => 'PHPSESSID=37c0f03de7441d0c1ba91f861c0b677a',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index2\controller\Brokerage->index[ /Applications/MAMP/htdocs/start/sbt/application/index2/controller/Brokerage.php ]
+[ info ] [ VIEW ] /Applications/MAMP/htdocs/start/sbt/application/index2/view/brokerage/index.html [ array (
+  0 => 'lists',
+  1 => 'pages',
+  2 => 'order_id',
+) ]
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2017-11-11T12:16:53+08:00 ] ::1 ::1 GET /index2/brokerage/index.html?order_time=&end_time=&keyworld=11231
+[ info ] api.sbt.com/index2/brokerage/index.html?order_time=&end_time=&keyworld=11231 [运行时间：0.105580s][吞吐率：9.47req/s] [内存消耗：4,545.55kb] [文件加载：57]
+[ info ] [ LANG ] /Applications/MAMP/htdocs/start/sbt/thinkphp/lang/zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index2',
+    1 => 'brokerage',
+    2 => 'index',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => 'api.sbt.com',
+  'connection' => 'keep-alive',
+  'upgrade-insecure-requests' => '1',
+  'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'referer' => 'http://api.sbt.com/index2/brokerage/index.html',
+  'accept-encoding' => 'gzip, deflate',
+  'accept-language' => 'zh-CN,zh;q=0.8,en;q=0.6',
+  'cookie' => 'PHPSESSID=37c0f03de7441d0c1ba91f861c0b677a',
+)
+[ info ] [ PARAM ] array (
+  'order_time' => '',
+  'end_time' => '',
+  'keyworld' => '11231',
+)
+[ info ] [ SESSION ] INIT array (
+  'id' => '',
+  'var_session_id' => '',
+  'prefix' => 'think',
+  'type' => '',
+  'auto_start' => true,
+)
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index2\controller\Brokerage->index[ /Applications/MAMP/htdocs/start/sbt/application/index2/controller/Brokerage.php ]
+[ info ] [ VIEW ] /Applications/MAMP/htdocs/start/sbt/application/index2/view/brokerage/index.html [ array (
+  0 => 'lists',
+  1 => 'pages',
+  2 => 'order_id',
+) ]
+[ info ] [ LOG ] INIT File
