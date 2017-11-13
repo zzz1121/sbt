@@ -49,10 +49,20 @@ class Level extends Online
     }
     //修改等级数据
     public function edit(){
-        $rate=model('rate')->select();
+        $role_id=input('role_id');
+
+        $rate=db('role_settle')
+            ->alias('a')
+            ->join('rate b','a.pay_id=b.pay_prot_id')
+            ->where('role_id',$role_id)
+            ->field('a.*,b.pay_name,b.pay_prot_id')
+            ->select();
+        if(empty($rate)){
+            $rate=model('rate')->select();
+        }
+
         $this->assign('rate',$rate);
         if(request()->isPost()){
-            $role_id=input('post.role_id');
 
             if($role_id==1){
 				$result=Db::table('role')
@@ -121,8 +131,6 @@ class Level extends Online
             $this->returnMsg['status']=200;
             return $this->returnMsg;
         }
-
-        $role_id=input('get.role_id');
         $data=model('role')
             ->where('role_id',$role_id)
             ->find();

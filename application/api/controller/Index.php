@@ -46,7 +46,7 @@ class Index extends Controller
         return $hash;
     }
     //token验证
-    protected function token_check(){
+    public function token_check(){
         $token=input('token');
         $user_id=input('phone');
         if(empty($token) || empty($user_id)){
@@ -72,7 +72,7 @@ class Index extends Controller
     }
 
     //用户名加*
-    protected function name_mask($name){
+    public function name_mask($name){
         $str='';
         if(strlen($name)>6){
             $str=mb_substr($name,0,1,'utf-8')."*".mb_substr($name,-1,1,'utf-8');
@@ -82,7 +82,7 @@ class Index extends Controller
         return $str;
     }
     //刷新用户费率
-    protected function change_settle_rate($user,$rate){
+    public function change_settle_rate($user,$rate){
 
         $reg_data = [
             'sp_id' => config('sp_id'),
@@ -117,7 +117,7 @@ class Index extends Controller
     }
 
     //log记录
-    protected function log_write($file_name,$message){
+    public function log_write($file_name,$message){
         $path = ROOT_PATH .'public' . DS . 'log'.DS.date('Y-m-d',time()).DS;
 
         if(!is_dir($path)){
@@ -137,7 +137,7 @@ class Index extends Controller
         fclose($fh);
     }
 
-    protected function get_settle($pay_id=1,$user_id){
+    public function get_settle($pay_id=1,$user_id){
         $user=model('user')
             ->where('user_id',$user_id)
             ->find();
@@ -145,18 +145,11 @@ class Index extends Controller
             return false;
         }
 
-        if($user['user_type']==1 && $user['role_id']==1){
+        if($user['user_type']==1 ){
             $data = Db::table('rate')
 //                ->field('pay_prot_id,rate_type,pay_name,settle_rate,extra_rate,min_charge,start_time,end_time,min_money,max_money,parent,')
                 ->where('pay_prot_id',$pay_id)
                 ->find();
-
-        }elseif($user['user_type']==1 && $user['role_id']>1){
-            $data = Db::table('role_settle')
-//                ->field('pay_prot_id,rate_type,pay_name,settle_rate,extra_rate,min_charge,start_time,end_time,min_money,max_money,parent,')
-                ->where('pay_prot_id',$pay_id)
-                ->find();
-
 
         }elseif($user['is_merchant']==2){
             $data=Db::table('group_settle')
@@ -165,7 +158,7 @@ class Index extends Controller
                 ->where('group_id',$user['user_id'])
                 ->where('user_lv',1)
                 ->where('a.pay_id',$pay_id)
-                ->field('a.settle_rate,a.extra_rate,a.parent,a.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money')
+                ->field('a.settle_rate,a.extra_rate,a.parent,a.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
                 ->find();
         }elseif($user['user_type']==2 && $user['group_up']==$user['group_id']){
             $data=Db::table('group_settle')
@@ -174,7 +167,7 @@ class Index extends Controller
                 ->where('group_id',$user['group_id'])
                 ->where('user_lv',2)
                 ->where('a.pay_id',$pay_id)
-                ->field('a.settle_rate,a.extra_rate,a.parent,a.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money')
+                ->field('a.settle_rate,a.extra_rate,a.parent,a.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
                 ->find();
         }elseif($user['user_type']==2 && $user['group_up']!==$user['group_id']){
             $data=Db::table('group_settle')
@@ -183,12 +176,15 @@ class Index extends Controller
                 ->where('group_id',$user['group_id'])
                 ->where('user_lv',3)
                 ->where('a.pay_id',$pay_id)
-                ->field('a.settle_rate,a.extra_rate,a.parent,a.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money')
+                ->field('a.settle_rate,a.extra_rate,a.parent,a.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
                 ->find();
         }
 
         if(empty($data)){
-            return false;
+            $data = Db::table('rate')
+//                ->field('pay_prot_id,rate_type,pay_name,settle_rate,extra_rate,min_charge,start_time,end_time,min_money,max_money,parent,')
+                ->where('pay_prot_id',$pay_id)
+                ->find();
         }
         $rate=db('user_settle')
             ->where('user_id',$user['user_id'])
@@ -203,7 +199,7 @@ class Index extends Controller
 
 
     //分润算法
-    protected function fenrun($order,$user){
+    public function fenrun($order,$user){
 
         if($order['order_status']=="SUCCESS" || empty($user)){
             return false;
@@ -220,6 +216,8 @@ class Index extends Controller
                 return false;
             }
             //获取当前平台手续费率
+        }elseif($user['is_merchant']==2){
+            return true;
         }elseif($user['user_type']==2){
             $sye_rate=$this->get_settle($order['pay_prot_id'],$user['group_id']); //获取当前平台手续费率
 
@@ -406,7 +404,7 @@ class Index extends Controller
 
 
     //php对象转数组
-    protected function object_to_array($object) {
+    public function object_to_array($object) {
         $array=array();
         if (is_object($object)) {
             foreach ($object as $key => $value) {
@@ -425,7 +423,7 @@ class Index extends Controller
         return $array;
     }
     //获取图片接口信息
-    protected function get_pic_data($url,$pic_path,$type=null){
+    public function get_pic_data($url,$pic_path,$type=null){
         $postData="bas64String=".$this->img_to_base($pic_path); //post数据拼接
 
         if(!empty($type)){
@@ -468,7 +466,7 @@ class Index extends Controller
 
 
     //base64图片上传处理保存
-    protected function base_img_upload($base64=NULL,$dir="temporary"){
+    public function base_img_upload($base64=NULL,$dir="temporary"){
         // 获取表单上传文件 例如上传了001.jpg
         if(empty($base64)){
             $this->returnMsg['message']='图片上传失败';
@@ -500,7 +498,7 @@ class Index extends Controller
      * @param sting $imgsrc 图片路径
      * @param string $imgdst 压缩后保存路径
      */
-    protected function image_png_size_add($imgsrc,$imgdst){
+    function image_png_size_add($imgsrc,$imgdst){
         list($width,$height,$type)=getimagesize($imgsrc);
         $new_width = ($width>1024?1024:$width)*2;
         $new_height =($height>1024?1024:$height)*2;
@@ -539,7 +537,7 @@ class Index extends Controller
      * @param sting $image_file图片路径
      * @return boolean t 是 f 否
      */
-    protected function check_gifcartoon($image_file){
+    function check_gifcartoon($image_file){
         $fp = fopen($image_file,'rb');
         $image_head = fread($fp,1024);
         fclose($fp);
@@ -550,7 +548,7 @@ class Index extends Controller
      * @param sting $image_file图片路径
      * @return boolean t 是 f 否
      */
-    protected function img_to_base($image_file){
+    function img_to_base($image_file){
         return urlencode(base64_encode(file_get_contents($image_file)));
     }
 
@@ -615,7 +613,7 @@ class Index extends Controller
     }
 
     //图片文件上传保存
-    protected function load_img_save($file,$file_path="temporary"){
+    public function load_img_save($file,$file_path="temporary"){
         if($file["error"])
         {
             echo $file["error"];
@@ -658,7 +656,7 @@ class Index extends Controller
         }
     }
 
-    protected function sms_ali($mobile_code="1233",$moblie="18649738701"){
+    public function sms_ali($mobile_code="1233",$moblie="18649738701"){
         $this->returnMsg['sss']=$mobile_code.$moblie;
         if(empty($mobile_code) || empty($moblie)){
 

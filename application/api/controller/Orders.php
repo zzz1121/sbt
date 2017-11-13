@@ -56,11 +56,11 @@ class Orders extends Online
             return $this->returnMsg;
         }
         $mcht_data=db('user_pay_data')  //通道账号
-            ->where('user_id',$this->online['user_id'])
+        ->where('user_id',$this->online['user_id'])
             ->where('pay_id',$pay_prot_id)
             ->find();
         $debit_card = Db::table('user_card')//绑定卡
-            ->where('card_id', $this->online['debit_card'])
+        ->where('card_id', $this->online['debit_card'])
             ->find();
 
 
@@ -443,7 +443,6 @@ class Orders extends Online
                 $res=model('orders')
                     ->where('order_id',$order_id)
                     ->update(['order_status'=>'PROCESSING']);
-
                 $this->log_write('shangfu_log','写入失败');
                 $this->returnMsg['message']='支付成功';
                 $this->returnMsg['status']=200;
@@ -455,6 +454,17 @@ class Orders extends Online
                 ];
                 return $this->returnMsg;
             }
+            $this->returnMsg['message']='支付成功';
+            $this->returnMsg['status']=200;
+            $this->returnMsg['data']=[
+                'to_card'=>substr($order['to_card'],-4),
+                'order_status'=>'SUCCESS',
+                'to_bank'=>$bank_name,
+                'time'=>date("Y-m-d H:i:s",$order['order_time'])
+            ];
+            return $this->returnMsg;
+
+
         }
         $res=model('orders')
             ->where('order_id',$order_id)

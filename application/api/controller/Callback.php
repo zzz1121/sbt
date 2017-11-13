@@ -38,11 +38,7 @@ class Callback extends Index
                 $this->log_write('shangfu_log','用户错误');
                 return $this->returnMsg;
             }
-            if($user['is_merchant']==2){
-                $this->returnMsg['message']="签约代理订单";
-                $this->log_write('shangfu_log','签约代理订单');
-                return $this->returnMsg;
-            }
+
 
             if ( empty($post_data) || empty($post_data['sign']) || $post_data['sign'] !== strtolower($this->sbt_sign($post_data,$mcht_data['secret_key'])['sign'])) {
                 $this->returnMsg['message']="签名错误";
@@ -66,7 +62,7 @@ class Callback extends Index
                 $this->log_write('shangfu_log','订单未找到');
                 return $this->returnMsg;
             }
-            if($order['order_status']!=="PROCESSING"){
+            if($order['order_status']=="SUCCESS" || $order['order_status']=="FAIL"){
                 $this->returnMsg['message']="订单已处理";
                 $this->log_write('shangfu_log','订单已处理');
                 return $this->returnMsg;
@@ -76,6 +72,7 @@ class Callback extends Index
             if($post_data['trade_state']=="SUCCESS"){
 //                return $user;
 //                return $this->fenrun($order['order_id'],$user['user_id']);
+
                 $res=$this->fenrun($order,$user);
                 if(!$res){
                     $this->returnMsg['message']="写入失败";
