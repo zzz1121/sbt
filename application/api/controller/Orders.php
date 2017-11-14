@@ -65,6 +65,11 @@ class Orders extends Online
 
 
         if ($pay_prot_id == 1 || $pay_prot_id==3) {   //上福订单请求
+            if($pay_prot_id==1){
+                $sp_id="1086-2";
+            }else{
+                $sp_id="1086-1";
+            }
             vendor('shangfupay.shangfupay');
             $pay=new \Shangfupay();
             if(empty($mcht_data)){
@@ -123,7 +128,7 @@ class Orders extends Online
 
 
             $post_data = [
-                'sp_id' => config('sp_id'),
+                'sp_id' => $sp_id,
                 'mcht_no' => $mcht_data['mcht_no'],
                 'order_id' => $order_id,
                 'money' => $money,
@@ -385,13 +390,6 @@ class Orders extends Online
             $this->returnMsg['message']='订单不存在,请重新提交订单';
             return $this->returnMsg;
         }
-        $post_data = [
-            'sp_id' => config('sp_id'),
-            'mch_id' => $this->online['mcht_no_1'],
-            'out_trade_no' => $order_id,
-            'password' => $password,
-            'nonce_str' => $this->random(4, 1)
-        ];
         $mcht_data=db('user_pay_data')
             ->where('user_id',$this->online['user_id'])
             ->where('pay_id',$order['pay_prot_id'])
@@ -435,6 +433,9 @@ class Orders extends Online
             ->where('card_id',$order['to_card'])
             ->field('bank_name')
             ->find()['bank_name'];
+        $res=model('orders')
+            ->where('order_id',$order_id)
+            ->update(['order_status'=>$result->result_code]);
         if($result->result_code=="SUCCESS" ){
             $user=$this->online;
             // 代理商抽成提取
@@ -466,9 +467,7 @@ class Orders extends Online
 
 
         }
-        $res=model('orders')
-            ->where('order_id',$order_id)
-            ->update(['order_status'=>$result->result_code]);
+
         if($result->result_code=="FAIL"){
             $this->returnMsg['message'] = $result->err_msg.",请重新下单";
             return $this->returnMsg;

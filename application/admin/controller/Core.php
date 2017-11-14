@@ -72,7 +72,79 @@ class Core extends Controller
         return $data;
     }
 
+    public function get_channel($pay_id=1,$user_id)
+    {
+        $user=model('user')
+        ->where('user_id',$user_id)
+        ->find();
+        if(empty($user)){
+            return false;
+        }
+        if($user['user_type']==1 && $user['role_id']>1){
+            $data=Db::table('role_settle')
+                ->alias('a')
+                ->join('rate b','a.pay_id=b.pay_prot_id')
+                ->where('role_id',$user['role_id'])
+                ->field('a.settle_rate,a.extra_rate,b.parent,b.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
+                ->select();
+        }elseif($user['is_merchant']==2){
+            $data=Db::table('group_settle')
+                ->alias('a')
+                ->join('rate b','a.pay_id=b.pay_prot_id')
+                ->where('group_id',$user['user_id'])
+                ->where('user_lv',1)
+                ->where('b.status',1)
+                ->field('a.settle_rate,a.extra_rate,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money')
+                ->select();
+        }elseif($user['user_type']==2 && $user['group_up']==$user['group_id']){
+            $data=Db::table('group_settle')
+                ->alias('a')
+                ->join('rate b','a.pay_id=b.pay_prot_id')
+                ->where('group_id',$user['group_id'])
+                ->where('user_lv',2)
+                ->where('b.status',1)
+                ->field('a.settle_rate,a.extra_rate,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money')
+                ->select();
+        }elseif($user['user_type']==2 ){
+            $data=Db::table('group_settle')
+                ->alias('a')
+                ->join('rate b','a.pay_id=b.pay_prot_id')
+                ->where('group_id',$user['group_id'])
+                ->where('user_lv',3)
+                ->where('b.status',1)
+                ->field('a.settle_rate,a.extra_rate,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money')
+                ->select();
+        }elseif($user['user_type']==1 ){
+            $data = Db::table('rate')
+                ->field('pay_prot_id,rate_type,pay_name,settle_rate,extra_rate,min_charge,start_time,end_time,min_money,max_money')
+                ->where('status',1)
+                ->select();
 
+        }
+
+        if(empty($data)){
+            $this->returnMsg['message']='通道为空';
+            return $data;
+        }
+        foreach($data as $key=>$val){
+            $rate=db('user_settle')
+                ->where('user_id',$user['user_id'])
+                ->where('pay_id',$val['pay_prot_id'])
+                ->find();
+            if(!empty($rate)){
+                $data[$key]['settle_rate']=$rate['settle_rate'];
+                $data[$key]['extra_rate']=$rate['extra_rate'];
+            }
+        }
+
+
+
+
+        $this->returnMsg['status']=200;
+        $this->returnMsg['message']='请求成功';
+        $this->returnMsg['data']=$data;
+        return $this->returnMsg;
+    }
 
     /**
      * 通用状态设置

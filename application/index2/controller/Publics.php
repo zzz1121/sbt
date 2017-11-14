@@ -31,7 +31,7 @@ class Publics extends Core
                 $this->returnMsg['message']='账户密码有误';
                 return $this->returnMsg;
             }
-            if($user_data['is_merchant']!==2){
+            if($user_data['user_type']==2&&$user_data['is_merchant']!==2 || $user_data['role_id']==1 && $user_data['user_type']==1){
                 $this->returnMsg['message']='抱歉,你的账号权限无法登陆管理系统';
                 return $this->returnMsg;
             }

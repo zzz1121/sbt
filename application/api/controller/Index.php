@@ -81,40 +81,6 @@ class Index extends Controller
         }
         return $str;
     }
-    //刷新用户费率
-    public function change_settle_rate($user,$rate){
-
-        $reg_data = [
-            'sp_id' => config('sp_id'),
-            'mcht_no' => $this->online['mcht_no_1'],
-            'busi_type' => 'EPAYS',
-            'settle_type' => 'REAL_PAY',
-            'settle_rate' => $this->settle_rate,
-            'extra_rate_type' => "AMOUNT",
-            'extra_rate' => $this->sye_rate['extra_rate'],
-            'nonce_str' => $this->random(4, 1)
-        ];
-        //$this->returnMsg['reg_data']=$reg_data;
-        //$this->returnMsg['key']=config('sbt_key');
-        $reg_data = $this->sbt_sign($reg_data,config('sbt_key'));
-        $url = config('sbt_api_url'). '/gate/msvr/busiratemodify';
-        $result_reg = $this->curl_allinfo($url, false, $reg_data['data']);
-        if(empty($result_reg)){
-            $this->returnMsg['message'] = '系统繁忙，请稍候再试';
-            return 401;
-        }
-        if ($result_reg->status !== 'SUCCESS') {
-            $this->returnMsg['message'] = $result_reg->message;
-            //return $this->returnMsg;
-            return 401;
-        }
-        if($result_reg->result_code!=="SUCCESS"){
-            $this->returnMsg['message'] = $result_reg->err_msg;
-            //return $this->returnMsg;
-            return 401;
-        }
-        return 200;
-    }
 
     //log记录
     public function log_write($file_name,$message){
@@ -145,20 +111,13 @@ class Index extends Controller
             return false;
         }
 
-        if($user['user_type']==1 ){
-            $data = Db::table('rate')
-//                ->field('pay_prot_id,rate_type,pay_name,settle_rate,extra_rate,min_charge,start_time,end_time,min_money,max_money,parent,')
-                ->where('pay_prot_id',$pay_id)
-                ->find();
-
-        }elseif($user['is_merchant']==2){
-            $data=Db::table('group_settle')
+        if($user['user_type']==1 && $user['role_id']>1){
+            $data=Db::table('role_settle')
                 ->alias('a')
                 ->join('rate b','a.pay_id=b.pay_prot_id')
-                ->where('group_id',$user['user_id'])
-                ->where('user_lv',1)
+                ->where('a.role_id',$user['role_id'])
                 ->where('a.pay_id',$pay_id)
-                ->field('a.settle_rate,a.extra_rate,a.parent,a.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
+                ->field('a.settle_rate,a.extra_rate,b.parent,b.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
                 ->find();
         }elseif($user['user_type']==2 && $user['group_up']==$user['group_id']){
             $data=Db::table('group_settle')
@@ -178,6 +137,11 @@ class Index extends Controller
                 ->where('a.pay_id',$pay_id)
                 ->field('a.settle_rate,a.extra_rate,a.parent,a.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
                 ->find();
+        }elseif($user['user_type']==1){
+            $data = Db::table('rate')
+//                ->field('pay_prot_id,rate_type,pay_name,settle_rate,extra_rate,min_charge,start_time,end_time,min_money,max_money,parent,')
+                ->where('pay_prot_id',$pay_id)
+                ->find();
         }
 
         if(empty($data)){
@@ -189,6 +153,7 @@ class Index extends Controller
         $rate=db('user_settle')
             ->where('user_id',$user['user_id'])
             ->where('pay_id',$pay_id)
+            ->field('settle_rate,extra_rate')
             ->find();
         if(!empty($rate)){
             $data['settle_rate']=$rate['settle_rate'];
