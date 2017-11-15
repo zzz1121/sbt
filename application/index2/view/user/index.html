@@ -17,24 +17,8 @@
                 </div>
                 <div class="layui-form-mid layui-word-aux"></div>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">用户等级</label>
-                <div class="layui-input-inline layui-select">
-                    <select name="role_id" class="field-type" type="select">
-                        <option value="-1">请选择</option>
-                        {volist name="$role_data" id="v"}
-                            <option value="{$v['role_id']}" {eq name="$v['role_id']" value="$Think.get.role_id"}selected=selected{/eq} >{$v['role_name']}</option>
-                        {/volist}
-                    </select>
-                </div>
-                <div class="layui-form-mid layui-word-aux"></div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">注册时间</label>
-                <div class="layui-input-inline">
-                    <input type="date" name="reg_time" value="{$Think.get.reg_time}" lay-verify="required" placeholder="姓名,手机号查找" autocomplete="off" class="layui-input">
-                </div>
-            </div>
+
+
             <div class="layui-form-item">
                 <label class="layui-form-label">搜索</label>
                 <div class="layui-input-inline">
@@ -49,12 +33,7 @@
 
         </form>
     </div>
-    <div class="layui-btn-group fl">
-        <!--<a href="{:url('add')}" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>-->
-        <a data-href="{:url('status?table=user&status=1')}" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-qiyong"></i>启用</a>
-        <a data-href="{:url('status?table=user&status=0')}" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-jinyong1"></i>禁用</a>
-        <!-- <a data-href="{:url('delUser')}" class="layui-btn layui-btn-primary j-page-btns confirm"><i class="aicon ai-jinyong"></i>删除</a>-->
-    </div>
+
 </div>
 <form id="pageListForm">
     <div class="layui-form">

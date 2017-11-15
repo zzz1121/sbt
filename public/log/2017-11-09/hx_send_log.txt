@@ -1,2 +1,0 @@
-
-2017--11-09 23:03:43{"app_id":"a856dde9d4a343b186b12de4278d78fa","trans_type":"REALNAME_AUTH4","client_trans_id":"20171109230342","trans_timestamp":1510239822,"data":"{\"mobile\":\"18649738701\",\"family_name\":\"\\u5f20\\u826f\\u94a6\",\"id_card\":\"352228199604260517\",\"bank_no\":\"6217001820015040029\"}","sign":"hC+6lFWwetd3nve\/XG92MAnXi6YHBQyOtaHwOdCMb+ZalEPTZZUl\/U7Mu642tXXdzORD8AMRECOGfXp+I03ewDAXguKZ3v2xAKkD53KU9Ymycrwpuk+bkm4+YdcxnbeosPIiqY2F9MddOB0EFVl3YlteZaTM\/K4l408bkY3nbc0="}

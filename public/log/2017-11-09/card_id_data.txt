@@ -1,2 +1,0 @@
-
-2017--11-09 23:03:42{"error_code":"","reason":"Succes","result":{"bankname":"\u4e2d\u56fd\u5efa\u8bbe\u94f6\u884c","banknum":"1050000","cardprefixnum":"621700","cardname":"\u9f99\u5361\u901a","cardtype":"\u94f6\u8054\u501f\u8bb0\u5361","cardprefixlength":"6","cardlength":"19","isLuhn":true,"iscreditcard":1,"bankurl":"http:\/\/www.ccb.com\/","enbankname":"China Construction Bank","abbreviation":"CCB","bankimage":"http:\/\/auth.apis.la\/bank\/2_CCB.png","servicephone":"95533"}}

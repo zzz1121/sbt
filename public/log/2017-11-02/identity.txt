@@ -1,3 +1,0 @@
-
-2017--11-02 11:30:48{"reason":"\u56fe\u50cf\u672a\u8bc6\u522b\u5230\u76f8\u5173\u6570\u636e","result":"[]","error_code":400}
-2017--11-02 11:31:11{"reason":"\u8eab\u4efd\u8bc1\u6b63\u9762","result":{"name":"\u6768\u6587\u6653","nation":"\u65cf","id_number":"371523198910022720","cardtype":"positive","sex":"\u5973","birthday":"1989\u5e7410\u67082\u65e5","address":"\u5c71\u4e1c\u7701\u830c\u5e73\u53bf\u83dc\u5c6f\u9547\u6768\u69d0\u6751122\u53f7"},"error_code":200}

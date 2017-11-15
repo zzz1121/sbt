@@ -4,7 +4,7 @@
 <div class="layui-tab-content page-tab-content">
   <div class="layui-tab-item layui-show">
     <div class="page-toolbar">
-      <div class="page-filter fr" style="height: 98px;">
+      <div class="page-filter fr" style="">
         <form class="layui-form layui-form-pane" action="{:url()}" method="get">
 
           <div class="layui-form-item">
@@ -53,23 +53,17 @@
             </div>
           </div>
 
-          <!--<div class="layui-form-item">-->
-            <!--<label class="layui-form-label">搜索</label>-->
-            <!--<div class="layui-input-inline">-->
-              <!--<input type="text" name="keyworld" value="{$Think.get.keyworld}" lay-verify="required" placeholder="姓名、手机号、订单号" autocomplete="off" class="layui-input">-->
-            <!--</div>-->
-          <!--</div>-->
+          <div class="layui-form-item">
+            <label class="layui-form-label">搜索</label>
+            <div class="layui-input-inline">
+              <input type="text" name="keyworld" value="{$Think.get.keyworld}" lay-verify="required" placeholder="姓名、手机号、订单号" autocomplete="off" class="layui-input">
+            </div>
+          </div>
           <div class="layui-form-item">
             <div class="layui-input-inline">
               <button type="submit" class="layui-btn seach-btn" >查找</button>
             </div>
           </div>
-          <div class="layui-form-item">
-            <div class="layui-input-inline">
-              <a class="layui-btn seach-btn" href="{:url('orders/load')}{$seach}">下载excel</a>
-            </div>
-          </div>
-
         </form>
       </div>
       <div class="layui-btn-group fl">
@@ -116,8 +110,10 @@
             <tr>
               <td><input type="checkbox" name="ids[]" value="{$vo.id}" class="layui-checkbox checkbox-ids" lay-skin="primary"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div></td>
               <td>{$vo.order_id}</td>
-              <td>{$vo.user_id}</td>
-              <td>{$vo.name}</td>
+              <td>{:substr_replace($vo['user_id'],"****",3,4)}</td>
+              <td> {if condition="$vo['name']"}
+                {:substr_replace($vo['name'],'*',3,3)}
+                {else /}未认证{/if}</td>
 
 
               <td  style="width: 180px;">

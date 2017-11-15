@@ -203,7 +203,7 @@ class Index extends Controller
         $res=Db::table('user')
             ->where("user_id",$user['user_id'])
             ->setInc('integral', $order['order_money']);
-
+        $user_rate=$this->get_settle($order['pay_prot_id'],$user['user_id']);
         if(!empty($user['merchant_id'])){
             // 代理商抽成提取
             $parent=Db::table('user')
@@ -212,6 +212,14 @@ class Index extends Controller
 //                        ->field('a.balance,a.merchant_id,a.integral,user_id')
                 ->find();
             $share_money=bcmul( $order['order_money'], $sye_rate['parent'],2 );
+            $rate_money=0;
+            if($parent['role_id']>1){
+                $parent_rate=$this->get_settle($order['pay_prot_id'],$user['user_id']);
+            }
+            if($user_rate-$parent_rate>0){
+                $rate_money=bcmul( $order['order_money'], ($user_rate-$parent_rate),2 );
+            }
+
             $res=Db::table('user')
                 ->where("user_id",$parent['user_id'])
                 ->inc('balance',$share_money)
@@ -223,6 +231,7 @@ class Index extends Controller
                     'commission_money'=>$share_money,
                     'order_money'=>$order['order_money'],
                     'user_id'=>$parent['user_id'],
+                    'rate_money'=>$rate_money,
                     'share_money'=>$share_money,
                     'commission_time'=>time()
                 ]);
@@ -233,6 +242,15 @@ class Index extends Controller
 //                            ->field('balance,integral,user_id')
                     ->find();
                 $superior_balance=bcmul( $order['order_money'], $sye_rate['superior'] ,2);
+
+                $rate_money=0;
+                if($parent['role_id']>1){
+                    $superior_rate=$this->get_settle($order['pay_prot_id'],$user['user_id']);
+                }
+                if($user_rate-$superior_rate>0){
+                    $rate_money=bcmul( $order['order_money'], ($user_rate-$superior_rate),2 );
+                }
+
                 $res=Db::table('user')
                     ->where("user_id",$superior['user_id'])
                     ->inc('balance',$superior_balance)
@@ -244,6 +262,7 @@ class Index extends Controller
                         'order_id'=>$order['order_id'],
                         'commission_money'=>$superior_balance,
                         'share_money'=>$superior_balance,
+                        'rate_money'=>$rate_money,
                         'order_money'=>$order['order_money'],
                         'user_id'=>$superior['user_id'],
                         'commission_time'=>time()
@@ -253,10 +272,7 @@ class Index extends Controller
         }
         if(!empty($user['merchant_id']) && $user['user_type']==2){
 
-            $user_rate=$this->get_settle($order['pay_prot_id'],$user['user_id']);
-
             $total=bcmul( $order['order_money'], ($user_rate['settle_rate']-$sye_rate['settle_rate']),2 );//总代总分润
-
 
             $balance=0;//总分润
             $rate_money=0;

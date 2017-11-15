@@ -14,14 +14,18 @@ class Online extends Core
         $user_data=model('user')
             ->alias('a')
             ->join('role b',"a.role_id=b.role_id")
-            ->field('a.user_id,a.role_id,b.role_name')
+//            ->field('a.user_id,a.role_id,b.role_name')
             ->where('a.user_id', $this->user_id)
             ->find();
         session('role_id',$user_data['role_id']);
+
+        $role_data=model('role')->select();
         $this->role_id=session('role_id');
         if(empty($this->user_id)){
             $this->redirect('publics/index');
         }
+        $this->assign('user_data',$user_data);
+        $this->assign('role_data',$role_data);
     }
 
 

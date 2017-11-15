@@ -93,7 +93,16 @@
                 <!--</dl>-->
             <!--</li>-->
             <li class="layui-nav-item">
-                <a href="javascript:void(0);">签约代理商&nbsp;&nbsp;</a>
+                <a href="javascript:void(0);">
+                    {if condition="$user_data['user_type'] eq 1"}
+                    用户等级:{$role_data[$user_data['role_id']-1]['role_name']}
+                    {/if}
+                    {if condition="$user_data['user_type'] eq 2"}
+                    用户等级:
+                    {if condition="$user_data['is_merchant'] eq 2"}签约代理商{/if}
+                    {/if}
+
+                    &nbsp;&nbsp;</a>
                 <dl class="layui-nav-child">
                     <dd><a href="{:url('personal/info')}">个人设置</a></dd>
                     <dd><a href="{:url('publics/logout')}">退出登陆</a></dd>

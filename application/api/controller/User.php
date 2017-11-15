@@ -35,30 +35,41 @@ class User extends Online
             }else{
                 $period_time=strtotime( $this->sye_rate['period'].'day' );
             }
-			
+
+
+			//不可提现余额
             $not_account=Db::table('commission')
                 ->where('user_id',$user_id)
                 ->where('commission_time','>',(time()-$period_time))
                 ->where('commission_time','<',time())
-                ->field('sum(commission_money) as sum')
                 //->fetchSql(true)
-                ->find()['sum'];
+                ->sum('commission_money');
             $not_account=empty($not_account)?0:round( $not_account *100 )/100;
             //可提现余额
-            $balance_count=$merchant_data['balance']-($not_account);
+
+
+            //余额
+            $balance=db('commission')
+                ->where('user_id',$user_id)
+                ->sum('commission_money');
+            //已提现余额
+            $withdraw_count=db('pay_orders')
+                ->where('user_id',$user_id)
+                ->where('pay_status',"PAY_SUCCESS")
+                ->whereOr('pay_status','PAY_SUBMIT')
+                ->sum('pay_money');
+
+            $balance_count=$balance-$withdraw_count-($not_account);
+            if($balance_count<0)$balance_count=0;
             if($balance_count<0){
                 $balance_count=0;
             }
-            $this->returnMsg['data']['settle_rate']=$merchant_data['settle_rate'];
-            if($merchant_data['user_type']==2){
-                $this->returnMsg['data']['settle_rate']=model('user')->where('user_id',$user_id)->value('settle_rate');
-            }
+
 
 
 
             $this->returnMsg['data']['integral']=$merchant_data['integral'];
             $this->returnMsg['data']['underling']=$merchant_data['underling'];
-            $this->returnMsg['data']['indirect']=$merchant_data['indirect'];
 
             $this->returnMsg['data']['not_account']=$not_account;
             $this->returnMsg['data']['balance_count']=$balance_count;

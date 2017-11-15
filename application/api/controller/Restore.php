@@ -9,8 +9,11 @@ class Restore extends Index
 
     public function index(){
         $res=Db::table('commission')
-            ->group('user_id')
-            ->field('user_id,sum(commission_money) as sum')
+            ->alias('a')
+            ->join('user b','a.user_id=b.user_id')
+            ->where('b.user_type',1)
+            ->group('a.user_id')
+            ->field('a.user_id,sum(a.commission_money) as sum')
             ->select();
         $sum=0;
         foreach($res as $val){
@@ -20,10 +23,13 @@ class Restore extends Index
             $sum+=$res2;
         }
         $res_sum=Db::table('pay_orders')
-            ->where('pay_status',"PAY_SUCCESS")
-			->whereOr('pay_status','PAY_SUBMIT')
-            ->field('user_id,sum(pay_money+pay_service) sum ')
-            ->group('user_id')
+            ->alias('a')
+            ->join('user b','a.user_id=b.user_id')
+            ->where('b.user_type',1)
+            ->where('a.pay_status',"PAY_SUCCESS")
+			->whereOr('a.pay_status','PAY_SUBMIT')
+            ->field('a.user_id,sum(a.pay_money+a.pay_service) sum ')
+            ->group('a.user_id')
             ->select();
         foreach($res_sum as $value){
             $res2=Db::table('user')

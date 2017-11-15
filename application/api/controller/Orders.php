@@ -390,6 +390,13 @@ class Orders extends Online
             $this->returnMsg['message']='订单不存在,请重新提交订单';
             return $this->returnMsg;
         }
+        $post_data = [
+            'sp_id' => config('sp_id'),
+            'mch_id' => $this->online['mcht_no_1'],
+            'out_trade_no' => $order_id,
+            'password' => $password,
+            'nonce_str' => $this->random(4, 1)
+        ];
         $mcht_data=db('user_pay_data')
             ->where('user_id',$this->online['user_id'])
             ->where('pay_id',$order['pay_prot_id'])

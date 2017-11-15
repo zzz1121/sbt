@@ -1,2 +1,0 @@
-
-2017--10-26 17:44:02{"data":"{\"resp_code\":\"PAY_SUBMIT\",\"resp_msg\":\"\u5904\u7406\u4e2d\"}","sign":"sYvNHh1JvpKPFzdNGQlSlL8NP6MqzQ6HnlNk4tjiKywpvry+ebOgHVXqHPTAxqx\/5Gz8MxocTBBYRi3\/AlSi7U5QA6zOm88+xMjG86s0deYt2q36sQ6rVb9Mlb2CafYz2Aronk3ps\/ZhgVfYCwjKJ4UsFBs0VEPxl2DrWNWBCGY=","app_id":"a856dde9d4a343b186b12de4278d78fa","trans_type":"","client_trans_id":"20171026174401","server_trans_id":"00120171026174402007707","trans_timestamp":1509011041,"resp_code":"000000","resp_msg":"\u8bf7\u6c42\u6210\u529f"}

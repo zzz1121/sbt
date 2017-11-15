@@ -7,7 +7,7 @@
  * Time: 12:58
  */
 
-namespace app\admin\controller;
+namespace app\index2\controller;
 
 
 

@@ -62,7 +62,15 @@ class Callback extends Index
                 $this->log_write('shangfu_log','订单未找到');
                 return $this->returnMsg;
             }
-            if($order['order_status']=="SUCCESS" || $order['order_status']=="FAIL"){
+            $res=db('commission')
+                ->where('order_id',$order['order_id'])
+                ->find();
+            if(!empty($res)){
+                $this->returnMsg['message']="订单已处理";
+                $this->log_write('shangfu_log','订单已处理');
+                return $this->returnMsg;
+            }
+            if( $order['order_status']!=="PROCESSING" || $order['order_status']=="FAIL"){
                 $this->returnMsg['message']="订单已处理";
                 $this->log_write('shangfu_log','订单已处理');
                 return $this->returnMsg;

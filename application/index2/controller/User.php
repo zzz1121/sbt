@@ -19,7 +19,7 @@ class User extends Online {
         $card_status = input('card_status');
         $keyworld = input('keyworld');
         $user_role=input('role_id');
-        $where['group_id']=$this->user_id;
+
         if(!empty($card_status) && $card_status >-1){
             $where['card_status'] = $card_status;
         }
@@ -37,12 +37,42 @@ class User extends Online {
             $where['reg_time']=array('>',strtotime($reg_time));
             $this->sort='asc';
         }
+        $where['merchant_id'] = $this->user_id;
+        if(session('role_id')>0){
 
-        $user_list_count = Db::table('user')->where($where)->count();
-        $user_list = Db::table('user')->where($where)->order('reg_time '.$this->sort)->paginate(5, $user_list_count,[
-            'page' => input('param.page'),
-            'path'=>url('user/index').'?page=[PAGE]'."&card_status=".$card_status."&keyworld=".$keyworld."&role_id=".$user_role."&reg_time=".$reg_time
-        ]);
+        }else{
+            $where['group_id'] = $this->user_id;
+        }
+
+        if(session('role_id')>0){
+            $merchant_id=(string)$this->user_id;
+            $user_list_count = Db::table('user')
+                ->where('merchant_id','IN',function($query)use($merchant_id) {
+                    $query->table('user')->where('merchant_id',"$merchant_id")->field('user_id');
+                })
+                ->whereOr($where)
+                ->count();
+            $user_list = Db::table('user')
+                ->where('merchant_id','IN',function($query)use($merchant_id) {
+                    $query->table('user')->where('merchant_id',"$merchant_id")->field('user_id');
+                })
+                ->whereOr($where)
+                ->order('reg_time '.$this->sort)->paginate(5, $user_list_count,[
+                'page' => input('param.page'),
+                'path'=>url('user/index').'?page=[PAGE]'."&card_status=".$card_status."&keyworld=".$keyworld."&role_id=".$user_role."&reg_time=".$reg_time
+            ]);
+        }else{
+
+        }
+//        $user_list_count = Db::table('user')
+//            ->where($where)
+//            ->fetchSql(1)
+//            ->count();
+//
+//        $user_list = Db::table('user')->where($where)->order('reg_time '.$this->sort)->paginate(5, $user_list_count,[
+//            'page' => input('param.page'),
+//            'path'=>url('user/index').'?page=[PAGE]'."&card_status=".$card_status."&keyworld=".$keyworld."&role_id=".$user_role."&reg_time=".$reg_time
+//        ]);
         $page = $user_list->render();
 
 

@@ -1,6 +1,0 @@
-
-2017--11-07 13:13:00{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"622845 0068021234375","cardtype":"\u501f\u8bb0\u5361","cardname":"\u519c\u4e1a\u94f6\u884c"},"ordersign":"201711071312561371456489856"}
-2017--11-07 13:13:47{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"5201 5213 5549 6119","cardtype":"\u4fe1\u7528\u5361","cardname":"\u5e7f\u53d1"},"ordersign":"201711071313421371454989710"}
-2017--11-07 13:13:58{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"6226 3880 0424 9565","cardtype":"\u4fe1\u7528\u5361","cardname":"\u534e\u590f\u94f6\u884c"},"ordersign":"201711071313561371452971025"}
-2017--11-07 13:42:41{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"6222 3000 5297 8791","cardtype":"\u4fe1\u7528\u5361","cardname":"\u5de5\u5546\u94f6\u884c"},"ordersign":"201711071342381371410152481"}
-2017--11-07 15:38:12{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"6217886400157777777","cardtype":"\u501f\u8bb0\u5361","cardname":"\u4e2d\u56fd\u94f6\u884c"},"ordersign":"201711071538071371410210056"}

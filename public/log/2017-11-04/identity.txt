@@ -1,6 +1,0 @@
-
-2017--11-04 21:27:41{"reason":"\u8eab\u4efd\u8bc1\u6b63\u9762","result":{"name":"\u5b8b\u534e\u82b3","nation":"\u6c49","id_number":"51312419900301322X","cardtype":"positive","sex":"\u5973","birthday":"1990\u5e743\u67081\u65e5","address":"\u56db\u5ddd\u7701\u6c49\u6e90\u53bf\u5b9c\u4e1c\u9547\u5bcc\u4e61\u67518\u7ec412\u53f7"},"error_code":200}
-2017--11-04 23:51:21{"reason":"\u8eab\u4efd\u8bc1\u53cd\u9762","result":{"validity":"2010.06.08-2030.06.08","authority":"\u65b0\u6c11\u5e02\u516c\u5b89\u5c40","cardtype":"back"},"error_code":200}
-2017--11-04 23:51:34{"reason":"\u8eab\u4efd\u8bc1\u53cd\u9762","result":{"validity":"2010.06.08-2030.06.08","authority":"\u65b0\u6c11\u5e02\u516c\u5b89\u5c40","cardtype":"back"},"error_code":200}
-2017--11-04 23:52:08{"reason":"\u8eab\u4efd\u8bc1\u53cd\u9762","result":{"validity":"2010.06.08-2030.06.08","authority":"\u65b0\u6c11\u5e02\u516c\u5b89\u5c40","cardtype":"back"},"error_code":200}
-2017--11-04 23:52:55{"reason":"\u8eab\u4efd\u8bc1\u6b63\u9762","result":{"name":"\u90ed\u4fde\u56fd","nation":"\u6c49","id_number":"152104198301102310","cardtype":"positive","sex":"\u7537","birthday":"1983\u5e741\u670810\u65e5","address":"\u8fbd\u5b81\u7701\u65b0\u6c11\u5e02\u5362\u5bb6\u7535\u4e61\u5218\u82b1\u5c6f\u675145\u53f7"},"error_code":200}

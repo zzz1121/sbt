@@ -1,3 +1,0 @@
-
-2017--11-04 16:36:11{"error_code":0,"reason":"\u8bc6\u522b\u6210\u529f","result":{"cardnumber":"6214 9202 0780 6066","cardtype":"\u501f\u8bb0\u5361","cardname":"\u5149\u5927\u94f6\u884c"},"ordersign":"201711041636101371497545610"}
-2017--11-04 21:28:34{"error_code":80031,"reason":"\u8bc6\u522b\u5931\u8d25,\u8bf7\u7a0d\u5019\u518d\u8bd5","ordersign":"201711042128321371448565255"}
