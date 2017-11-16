@@ -103,6 +103,46 @@ class Index extends Controller
         fclose($fh);
     }
 
+
+    //获取用户可提现余额
+    public function get_balance($user_id){
+        $this->sye_rate=db('rate')->where('pay_prot_id',1)->find();
+        if($this->sye_rate['period']==0){
+            $period_time=0;
+        }else{
+            $period_time=strtotime( $this->sye_rate['period'].'day' );
+        }
+
+
+        //不可提现余额
+        $not_account=Db::table('commission')
+            ->where('user_id',$user_id)
+            ->where('commission_time','>',(time()-$period_time))
+            ->where('commission_time','<',time())
+            //->fetchSql(true)
+            ->sum('commission_money');
+        $not_account=empty($not_account)?0:round( $not_account *100 )/100;
+        //可提现余额
+
+
+        //余额
+        $balance=db('commission')
+            ->where('user_id',$user_id)
+            ->sum('commission_money');
+        //已提现余额
+        $withdraw_count=db('pay_orders')
+            ->where('user_id',$user_id)
+            ->where('pay_status','<>',"PAY_FAILURE")
+            ->sum('pay_money+pay_service');
+        $balance_count=$balance-$withdraw_count-($not_account);
+        if($balance_count<0)$balance_count=0;
+        if($balance_count<0){
+            $balance_count=0;
+        }
+        return $balance_count;
+    }
+
+
     public function get_settle($pay_id=1,$user_id){
         $user=model('user')
             ->where('user_id',$user_id)
@@ -118,6 +158,15 @@ class Index extends Controller
                 ->where('a.role_id',$user['role_id'])
                 ->where('a.pay_id',$pay_id)
                 ->field('a.settle_rate,a.extra_rate,b.parent,b.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
+                ->find();
+        }elseif($user['is_merchant']==2 ){
+            $data=Db::table('group_settle')
+                ->alias('a')
+                ->join('rate b','a.pay_id=b.pay_prot_id')
+                ->where('group_id',$user_id)
+                ->where('user_lv',1)
+                ->where('a.pay_id',$pay_id)
+                ->field('a.settle_rate,a.extra_rate,a.parent,a.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
                 ->find();
         }elseif($user['user_type']==2 && $user['group_up']==$user['group_id']){
             $data=Db::table('group_settle')

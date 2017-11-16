@@ -7,13 +7,14 @@
 namespace app\api\controller;
 use think\Controller;
 use think\Db;
+use alisms\sms\Smsdemo;
 class Index extends Controller
 {
     private $appcode="be8d2d3ce04f43b386f180a14fcdb604";
-    public $returnMsg;
-    protected $online;
-	protected $settle_rate;
-	protected $sye_rate;
+    public $returnMsg; //默认返回信息格式
+    protected $online;//在线用户信息
+    protected $settle_rate; //用户提现费率
+    protected $sye_rate; //平台提现费率参数集合
     public function _initialize(){
         $this->returnMsg=[
             'status'=>401,
@@ -27,7 +28,6 @@ class Index extends Controller
             'status'=>200,
             'message'=>'success',
             'data'=>[]
-
         ];
         return $returnMsg;
     }
@@ -56,47 +56,413 @@ class Index extends Controller
             ->where('user_id',$user_id)
             ->where('token',$token)
             ->where('token_end>'.time())
-            ->field('user_id,number,name,card_status,token,picture,address,mcht_no,secretKey,debit_card,merchant_id,role_id')
+            //->field('user_id,number,name,card_status,token,picture,address,mcht_no,secretKey,debit_card,merchant_id,role_id,login_status,integral')
             ->find();
-		if(empty($user)){
+        if(empty($user)){
             return 401;
         }
-		$sye_rate=Db::table('rate')
-			->where('id',1)
-			->find();
-		$this->sye_rate=$sye_rate['settle_rate'];
-		
-		$this->merchant_rate=$sye_rate['settle_rate'];
-		if($user['role_id']==5 && empty($user['merchant_id']) ){
-			$rate=$sye_rate;
-		}elseif( !empty($user['merchant_id']) && $user['role_id']==5 ){
-			$rate=Db::table('merchant')
-			->where('merchant_id',$user['merchant_id'])
-			->find();
-			$merchant_rate=Db::table('merchant')
-                ->alias('a')
-                ->join('role b','a.role_id=b.role_id')
-                ->where('a.merchant_id',$user['merchant_id'])
-                ->field('b.settle_rate')
-                ->find()['settle_rate'];
-            $this->merchant_rate=$merchant_rate;
-		}else{
-			$rate=Db::table('role')
-			->where('role_id',$user['role_id'])
-			->find();
-		}
-		$this->settle_rate=$rate['settle_rate'];
-		//$this->returnMsg['data2']=$rate['settle_rate'];
-       
+        $sye_rate=Db::table('rate')
+            ->find();
+        if(empty($sye_rate)){
+            return 401;
+        }
+        $this->sye_rate=$sye_rate; //获取当前平台手续费率
         $this->online=$user;
         return 200;
     }
 
+    //用户名加*
+    public function name_mask($name){
+        $str='';
+        if(strlen($name)>6){
+            $str=mb_substr($name,0,1,'utf-8')."*".mb_substr($name,-1,1,'utf-8');
+        }else{
+            $str="*".mb_substr($name,-1,1,'utf-8');
+        }
+        return $str;
+    }
+    //刷新用户费率
+    public function change_settle_rate($user,$rate){
+
+        $reg_data = [
+            'sp_id' => config('sp_id'),
+            'mcht_no' => $this->online['mcht_no_1'],
+            'busi_type' => 'EPAYS',
+            'settle_type' => 'REAL_PAY',
+            'settle_rate' => $this->settle_rate,
+            'extra_rate_type' => "AMOUNT",
+            'extra_rate' => $this->sye_rate['extra_rate'],
+            'nonce_str' => $this->random(4, 1)
+        ];
+        //$this->returnMsg['reg_data']=$reg_data;
+        //$this->returnMsg['key']=config('sbt_key');
+        $reg_data = $this->sbt_sign($reg_data,config('sbt_key'));
+        $url = config('sbt_api_url'). '/gate/msvr/busiratemodify';
+        $result_reg = $this->curl_allinfo($url, false, $reg_data['data']);
+        if(empty($result_reg)){
+            $this->returnMsg['message'] = '系统繁忙，请稍候再试';
+            return 401;
+        }
+        if ($result_reg->status !== 'SUCCESS') {
+            $this->returnMsg['message'] = $result_reg->message;
+            //return $this->returnMsg;
+            return 401;
+        }
+        if($result_reg->result_code!=="SUCCESS"){
+            $this->returnMsg['message'] = $result_reg->err_msg;
+            //return $this->returnMsg;
+            return 401;
+        }
+        return 200;
+    }
+
+    //log记录
+    public function log_write($file_name,$message){
+        $path = ROOT_PATH .'public' . DS . 'log'.DS.date('Y-m-d',time()).DS;
+
+        if(!is_dir($path)){
+            mkdir($path);
+        }
+
+        $filename= $path.$file_name.".txt";
+        $fh = fopen($filename, "a+");
+        if(is_object($message) || is_array($message)){
+            $message="\n".date('Y--m-d H:i:s',time()).json_encode($message);
+        }else{
+            $message="\n".date('Y--m-d H:i:s',time()).$message;
+        }
+
+
+        fwrite($fh, $message);    // 输出：
+        fclose($fh);
+    }
+
+
+    //获取用户可提现余额
+    public function get_balance($user_id){
+        $this->sye_rate=db('rate')->where('pay_prot_id',1)->find();
+        if($this->sye_rate['period']==0){
+            $period_time=0;
+        }else{
+            $period_time=strtotime( $this->sye_rate['period'].'day' );
+        }
+
+
+        //不可提现余额
+        $not_account=Db::table('commission')
+            ->where('user_id',$user_id)
+            ->where('commission_time','>',(time()-$period_time))
+            ->where('commission_time','<',time())
+            //->fetchSql(true)
+            ->sum('commission_money');
+        $not_account=empty($not_account)?0:round( $not_account *100 )/100;
+        //可提现余额
+
+
+        //余额
+        $balance=db('commission')
+            ->where('user_id',$user_id)
+            ->sum('commission_money');
+        //已提现余额
+        $withdraw_count=db('pay_orders')
+            ->where('user_id',$user_id)
+            ->where('pay_status','<>',"PAY_FAILURE")
+            ->sum('pay_money+pay_service');
+        $balance_count=$balance-$withdraw_count-($not_account);
+        if($balance_count<0)$balance_count=0;
+        if($balance_count<0){
+            $balance_count=0;
+        }
+        return $balance_count;
+    }
+
+    //获取用户通道费率
+    public function get_settle($pay_id=1,$user_id){
+        $user=model('user')
+            ->where('user_id',$user_id)
+            ->find();
+        if(empty($user)){
+            return false;
+        }
+
+        if($user['user_type']==1 && $user['role_id']>1){
+            $data=Db::table('role_settle')
+                ->alias('a')
+                ->join('rate b','a.pay_id=b.pay_prot_id')
+                ->where('a.role_id',$user['role_id'])
+                ->where('a.pay_id',$pay_id)
+                ->field('a.settle_rate,a.extra_rate,b.parent,b.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
+                ->find();
+        }elseif($user['is_merchant']==2 ){
+            $data=Db::table('group_settle')
+                ->alias('a')
+                ->join('rate b','a.pay_id=b.pay_prot_id')
+                ->where('group_id',$user_id)
+                ->where('user_lv',1)
+                ->where('a.pay_id',$pay_id)
+                ->field('a.settle_rate,a.extra_rate,a.parent,a.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
+                ->find();
+        }elseif($user['user_type']==2 && $user['group_up']==$user['group_id']){
+            $data=Db::table('group_settle')
+                ->alias('a')
+                ->join('rate b','a.pay_id=b.pay_prot_id')
+                ->where('group_id',$user['group_id'])
+                ->where('user_lv',2)
+                ->where('a.pay_id',$pay_id)
+                ->field('a.settle_rate,a.extra_rate,a.parent,a.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
+                ->find();
+        }elseif($user['user_type']==2 && $user['group_up']!==$user['group_id']){
+            $data=Db::table('group_settle')
+                ->alias('a')
+                ->join('rate b','a.pay_id=b.pay_prot_id')
+                ->where('group_id',$user['group_id'])
+                ->where('user_lv',3)
+                ->where('a.pay_id',$pay_id)
+                ->field('a.settle_rate,a.extra_rate,a.parent,a.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
+                ->find();
+        }elseif($user['user_type']==1){
+            $data = Db::table('rate')
+//                ->field('pay_prot_id,rate_type,pay_name,settle_rate,extra_rate,min_charge,start_time,end_time,min_money,max_money,parent,')
+                ->where('pay_prot_id',$pay_id)
+                ->find();
+        }
+
+        if(empty($data)){
+            $data = Db::table('rate')
+//                ->field('pay_prot_id,rate_type,pay_name,settle_rate,extra_rate,min_charge,start_time,end_time,min_money,max_money,parent,')
+                ->where('pay_prot_id',$pay_id)
+                ->find();
+        }
+        $rate=db('user_settle')
+            ->where('user_id',$user['user_id'])
+            ->where('pay_id',$pay_id)
+            ->field('settle_rate,extra_rate')
+            ->find();
+        if(!empty($rate)){
+            $data['settle_rate']=$rate['settle_rate'];
+            $data['extra_rate']=$rate['extra_rate'];
+        }
+        return $data;
+    }
+
+
+    //分润算法
+    public function fenrun($order,$user){
+
+        if($order['order_status']=="SUCCESS" || empty($user)){
+            return false;
+        }
+
+        $order['order_money']=(int)$order['order_money'];
+        if($user['user_type']==1){
+            $sye_rate=Db::table('rate')
+                ->where('pay_prot_id',$order['pay_prot_id'])
+                ->find();
+            if(empty($sye_rate)){
+
+                $this->log_write('shangfu_log','通道费率未找到');
+                return false;
+            }
+            //获取当前平台手续费率
+        }elseif($user['is_merchant']==2){
+            return true;
+        }elseif($user['user_type']==2){
+            $sye_rate=$this->get_settle($order['pay_prot_id'],$user['group_id']); //获取当前平台手续费率
+
+            if(empty($sye_rate)){
+                $this->log_write('shangfu_log','通道费率未找到');
+                return false;
+            }
+        }
+        db::startTrans();
+        Db::table('commission')
+            ->insert([
+                'order_id'=>$order['order_id'],
+                'commission_money'=>0,
+                'order_money'=>$order['order_money'],
+                'user_id'=>$user['user_id'],
+                'commission_time'=>time()
+            ]);
+        $res=Db::table('user')
+            ->where("user_id",$user['user_id'])
+            ->setInc('integral', $order['order_money']);
+
+        if(!empty($user['merchant_id'])){
+            // 代理商抽成提取
+            $parent=Db::table('user')
+                ->alias('a')
+                ->where('a.user_id',$user['merchant_id'])
+//                        ->field('a.balance,a.merchant_id,a.integral,user_id')
+                ->find();
+            $share_money=bcmul( $order['order_money'], $sye_rate['parent'],2 );
+            $res=Db::table('user')
+                ->where("user_id",$parent['user_id'])
+                ->inc('balance',$share_money)
+                ->inc('integral',$order['order_money'])
+                ->update();
+            Db::table('commission')
+                ->insert([
+                    'order_id'=>$order['order_id'],
+                    'commission_money'=>$share_money,
+                    'order_money'=>$order['order_money'],
+                    'user_id'=>$parent['user_id'],
+                    'share_money'=>$share_money,
+                    'commission_time'=>time()
+                ]);
+
+            if(!empty($parent['merchant_id'])){
+                $superior=Db::table('user')
+                    ->where('user_id',$parent['merchant_id'])
+//                            ->field('balance,integral,user_id')
+                    ->find();
+                $superior_balance=bcmul( $order['order_money'], $sye_rate['superior'] ,2);
+                $res=Db::table('user')
+                    ->where("user_id",$superior['user_id'])
+                    ->inc('balance',$superior_balance)
+                    ->inc('integral',$order['order_money'])
+                    ->update();
+
+                Db::table('commission')
+                    ->insert([
+                        'order_id'=>$order['order_id'],
+                        'commission_money'=>$superior_balance,
+                        'share_money'=>$superior_balance,
+                        'order_money'=>$order['order_money'],
+                        'user_id'=>$superior['user_id'],
+                        'commission_time'=>time()
+                    ]);
+            }
+
+        }
+        if(!empty($user['merchant_id']) && $user['user_type']==2){
+
+            $user_rate=$this->get_settle($order['pay_prot_id'],$user['user_id']);
+
+            $total=bcmul( $order['order_money'], ($user_rate['settle_rate']-$sye_rate['settle_rate']),2 );//总代总分润
+
+
+            $balance=0;//总分润
+            $rate_money=0;
+            $service_money=0;
+            $group_up_settle=$this->get_settle($order['pay_prot_id'],$user['group_up']);
+            $rate_money=bcmul( $order['order_money'], ($user_rate['settle_rate']-$group_up_settle['settle_rate']),2 );
+            $res=Db::table('user') //代理分润写入
+            ->where("user_id",$user['group_up'])
+                ->inc('balance',$rate_money)
+                ->inc('integral',$order['order_money'])
+                ->update();
+            $comm_order=db('commission')
+                ->where('order_id',$order['order_id'])
+                ->where('user_id',$user['group_up'])
+                ->find();
+            if(empty($comm_order)){
+                Db::table('commission')     //代理分润写入
+                ->insert([
+                    'order_id'=>$order['order_id'],
+                    'commission_money'=>$rate_money,
+                    'order_money'=>$order['order_money'],
+                    'user_id'=>$user['group_up'],
+                    'rate_money'=>$rate_money,
+                    'commission_time'=>time()
+                ]);
+            }else{
+                db('commission')
+                    ->where('order_id',$order['order_id'])
+                    ->where('user_id',$user['group_up'])
+                    ->inc('commission_money',$rate_money)
+                    ->update([
+                        'rate_money'=>$rate_money,
+                    ]);
+            }
+            if($user['group_up']==$user['group_id']){//总代理分润写入
+                $service_money=($user_rate['extra_rate']-$sye_rate['extra_rate'])/100;
+                $group_order=db('commission')
+                    ->where('order_id',$order['order_id'])
+                    ->where('user_id',$user['group_id'])
+                    ->find();
+                if(empty($group_order)){
+                    Db::table('commission')     //代理分润写入
+                    ->insert([
+                        'order_id'=>$order['order_id'],
+                        'commission_money'=>$service_money,
+                        'service_money'=>$service_money,
+                        'order_money'=>$order['order_money'],
+                        'user_id'=>$user['group_id'],
+                        'rate_money'=>$rate_money,
+                        'share_money'=>0,
+                        'commission_time'=>time()
+                    ]);
+                }else{
+                    db('commission')
+                        ->where('order_id',$order['order_id'])
+                        ->where('user_id',$user['group_id'])
+                        ->inc('commission_money',$service_money-$share_money)
+                        ->update([
+                            'service_money'=>$service_money,
+                            'share_money'=>0,
+                        ]);
+                }
+                $res=Db::table('user') //代理分润写入
+                ->where("user_id",$user['group_id'])
+                    ->inc('balance',$service_money)
+                    ->update();
+            }
+            if($user['group_up']!==$user['group_id']){
+                //总代理分润写入
+                $group_up_settle=$this->get_settle($order['pay_prot_id'],$user['group_up']);
+                $rate=$group_up_settle['settle_rate']-$sye_rate['settle_rate']-$sye_rate['parent']-$sye_rate['superior'];
+                $group_money=bcmul( $order['order_money'], $rate,2 );
+                $service_money=($user_rate['extra_rate']-$sye_rate['extra_rate'])/100;
+                $group_order=db('commission')
+                    ->where('order_id',$order['order_id'])
+                    ->where('user_id',$user['group_id'])
+                    ->find();
+                if(empty($group_order)){
+                    Db::table('commission')     //代理分润写入
+                    ->insert([
+                        'order_id'=>$order['order_id'],
+                        'commission_money'=>($group_money+$service_money),
+                        'service_money'=>$service_money,
+                        'order_money'=>$order['order_money'],
+                        'user_id'=>$user['group_id'],
+                        'rate_money'=>$group_money,
+                        'commission_time'=>time()
+                    ]);
+                }else{
+                    db('commission')
+                        ->where('order_id',$order['order_id'])
+                        ->where('user_id',$user['group_id'])
+                        ->inc('commission_money',($group_money+$service_money))
+                        ->update([
+                            'rate_money'=>$group_money,
+                            'service_money'=>$service_money,
+                        ]);
+                }
+
+                $res=Db::table('user') //代理分润写入
+                ->where("user_id",$user['group_id'])
+                    ->inc('balance',($group_money+$service_money))
+                    ->inc('integral',$order['order_money'])
+                    ->update();
+            }
+        }
+        db::commit();
+        return true;
+    }
+
+
     //php对象转数组
     public function object_to_array($object) {
+        $array=array();
         if (is_object($object)) {
             foreach ($object as $key => $value) {
-                $array[$key] = $value;
+                if(empty($value)){
+                    $array[$key]='';
+
+                }else{
+                    $array[$key] = $value;
+                }
+
             }
         }
         else {
@@ -106,19 +472,21 @@ class Index extends Controller
     }
     //获取图片接口信息
     public function get_pic_data($url,$pic_path,$type=null){
-        $postData="pic=".$this->img_to_base($pic_path); //post数据拼接
+        $postData="bas64String=".$this->img_to_base($pic_path); //post数据拼接
+
         if(!empty($type)){
             $url.="?typeid=".$type;
         }
-        return $this->aliyun_curl($url,"POST",$postData);
+        $this->returnMsg['url']=$url;
+        $this->returnMsg['post']=$postData;
+        return $this->aliyun_curl($url,"POST",$postData,'ff74eab759eb4485b67eab325b8ac0ac');
     }
     //阿里云接口接入
     protected function aliyun_curl($url,$method="GET",$postFile=null,$appcode=NULL){
         $headers = array();
         $appcode=empty($appcode)?$this->appcode:$appcode;
         array_push($headers, "Authorization:APPCODE " . $appcode);
-		//$this->returnMsg['appcode']=$appcode;
-		//$this->returnMsg['postFile']=$postFile;
+
         if(!empty($postFile)) {
             //根据API的要求，定义相对应的Content-Type
             array_push($headers, "Content-Type" . ":" . "application}/x-www-form-urlencoded; charset=UTF-8");
@@ -138,13 +506,11 @@ class Index extends Controller
         if(!empty($postFile)){
             curl_setopt($curl, CURLOPT_POSTFIELDS, $postFile);
         }
-		//$this->returnMsg['dats']=curl_exec($curl);
+        //$this->returnMsg['dats']=curl_exec($curl);
         $result=json_decode(curl_exec($curl));
         curl_close($curl);
         return $result;
     }
-
-
 
 
     //base64图片上传处理保存
@@ -171,7 +537,7 @@ class Index extends Controller
             $this->returnMsg['message']='图片上传错误,请重新上传';
             return false;
         }
-        $this->image_png_size_add($pic_path,$pic_path);
+//        $this->image_png_size_add($pic_path,$pic_path);
         return $pic_path;
     }
 
@@ -182,8 +548,8 @@ class Index extends Controller
      */
     function image_png_size_add($imgsrc,$imgdst){
         list($width,$height,$type)=getimagesize($imgsrc);
-        $new_width = ($width>1024?1024:$width)*0.95;
-        $new_height =($height>1024?1024:$height)*0.95;
+        $new_width = ($width>1024?1024:$width)*2;
+        $new_height =($height>1024?1024:$height)*2;
         switch($type){
             case 1:
                 $giftype=check_gifcartoon($imgsrc);
@@ -233,44 +599,11 @@ class Index extends Controller
     function img_to_base($image_file){
         return urlencode(base64_encode(file_get_contents($image_file)));
     }
-	
-	 public function change_settle_rate(){
-        $reg_data = [
-            'sp_id' => config('sp_id'),
-            'mcht_no' => $this->online['mcht_no'],
-            'busi_type' => 'EPAYS',
-            'settle_type' => 'REAL_PAY',
-            'settle_rate' => $this->settle_rate,
-            'extra_rate_type' => 'AMOUNT',
-            'extra_rate' => 200,
-            'nonce_str' => $this->random(4, 1)
-        ];
-        $reg_data = $this->sbt_sign($reg_data,config('sbt_key'));
-        $url = config('sbt_api_url'). '/gate/msvr/busiratemodify';
-        $result_reg = $this->curl_allinfo($url, false, $reg_data['data']);
-		
-		//$this->returnMsg['data4']=$this->online;
-		//$this->returnMsg['data5']=$result_reg;
-		//$this->returnMsg['data3']=$this->settle_rate;
-        if(empty($result_reg)){
-            $this->returnMsg['message'] = '系统繁忙，请稍候再试';
-			return 401;
-		   //return $this->returnMsg;
-        }
-        if ($result_reg->status !== 'SUCCESS') {
-            $this->returnMsg['message'] = $result_reg->message;
-            //return $this->returnMsg;
-			return 401;
-        }
-        if($result_reg->result_code!=="SUCCESS"){
-            $this->returnMsg['message'] = $result_reg->err_msg;
-            //return $this->returnMsg;
-			return 401;
-        }
-        return 200;
-    }
-	
-	protected function curl_allinfo($urls, $header = NULL, $post = FALSE) {
+
+
+
+    // 阿里云api 接口调用
+    protected function curl_allinfo($urls, $header = NULL, $post = FALSE) {
         $url = is_array($urls) ? $urls['0'] : $urls;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -292,6 +625,8 @@ class Index extends Controller
         curl_close($ch);
         return json_decode($data);
     }
+
+    //sbt 签名认证
     protected function sbt_sign($post_data=null,$secret_key=NULL){
         $str='';
         if(!is_array($post_data)&&!is_object($post_data)){
@@ -305,6 +640,7 @@ class Index extends Controller
             $post_data=$arr;
         }
         ksort($post_data);//key值排序
+        $this->log_write('logg',$post_data);
         foreach($post_data as $key=>$val){
             if($key!=='sign'){
                 $str.=empty($val)?'':$key."=".$val."&";
@@ -315,12 +651,96 @@ class Index extends Controller
             $sign_key=$secret_key;
         }
         $str_sign=substr($str,0,-1).'&key='.$sign_key;
-		$this->returnMsg['$str']=$str;
+        //$this->returnMsg['$str']=$str;
         //$this->returnMsg['string']=$str_sign;
-		$this->returnMsg['key']=$sign_key;
+        //$this->returnMsg['key']=$sign_key;
         //$this->returnMsg['sign']=strtoupper (md5($str_sign));
         $result['sign']=strtoupper (md5($str_sign));//小写字符转义大写
         $result['data']=$str."sign=".strtoupper (md5($str_sign));
         return $result;
     }
+
+    //图片文件上传保存
+    public function load_img_save($file,$file_path="temporary"){
+        if($file["error"])
+        {
+            echo $file["error"];
+            return false;
+        }
+        else
+        {
+            //控制上传文件的类型，大小
+            if(($file["type"]=="image/jpeg" || $file["type"]=="image/png") && $file["size"]<1024*1024*3)
+            {
+                //找到文件存放的位置
+
+                $filepath = "./public/uploads/".$file_path."/".date('Ymd',time()).'/';
+                !file_exists($filepath) && mkdir($filepath, 0777);
+
+                $file_type=substr(strrchr($file['type'],'/'),1);
+                $filename = $filepath.md5(time().$this->random()).".".$file_type ;
+
+                //转换编码格式
+                $filename = iconv("UTF-8","gb2312",$filename);
+
+                //判断文件是否存在
+                if(file_exists($filename))
+                {
+                    //echo "该文件已存在！";
+                    return false;
+                }
+                else
+                {
+                    //保存文件
+                    move_uploaded_file($file["tmp_name"],$filename);
+                    return $filename;
+                }
+            }
+            else
+            {
+//                echo "文件类型不正确！";
+                return false;
+            }
+        }
+    }
+
+    public function sms_ali($mobile_code="1233",$moblie="18649738701"){
+        $this->returnMsg['sss']=$mobile_code.$moblie;
+        if(empty($mobile_code) || empty($moblie)){
+
+            return false;
+        }
+        $demo = new Smsdemo(
+            "LTAItTnVL6dKGHMg", // 请替换成您自己的AccessKeyId
+            "eKzCbneB27Dhzs8wrgvPGbj1Pbv2OX" // 请替换成您自己的AccessKeySecret
+        );
+        $response = $demo->sendSms(
+            "随便提", // 短信签名
+            "SMS_105020005", // 短信模板编号
+            (string)$moblie, // 短信接收者
+            Array(  // 短信模板中字段的值
+                "code"=>(string)$mobile_code
+            )
+        );
+        if(empty($response)){
+            $this->returnMsg['message']='短信发送失败';
+            $this->returnMsg['status']='401';
+            return false;
+        }
+        $result=$this->object_to_array($response);
+        $this->log_write('send_sms',$result);
+        if($result['Code']=='isv.BUSINESS_LIMIT_CONTROL'){
+            $this->returnMsg['message']='发送请求太过频繁，请稍后再试';
+            $this->returnMsg['status']='401';
+            return false;
+        }elseif($result['Code']=='OK'){
+            return true;
+        }
+        return false;
+    }
+
+
+
+
+
 }

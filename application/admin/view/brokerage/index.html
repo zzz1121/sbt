@@ -48,8 +48,8 @@
           </colgroup>
           <thead>
           <tr>
-            <th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div></th>
-            <th>分润单号</th>
+            <!--<th><input type="checkbox" name="" lay-skin="primary" lay-filter="allChoose"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div></th>-->
+            <th>序号</th>
             <th>订单号</th>
             <th>用户手机号</th>
             <th>用户姓名</th>
@@ -65,8 +65,8 @@
           <tbody>
           {volist name="lists" id="vo"}
           <tr>
-            <td><input type="checkbox" name="ids[]" value="{$vo.commission_id}" class="layui-checkbox checkbox-ids" lay-skin="primary"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div></td>
-            <td>{$vo.comission_id}</td>
+            <!--<td><input type="checkbox" name="ids[]" value="{$vo.commission_id}" class="layui-checkbox checkbox-ids" lay-skin="primary"><div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i class="layui-icon"></i></div></td>-->
+            <td>{$vo.commission_id}</td>
             <td>{$vo.order_id}</td>
             <td>{$vo.user_id}</td>
             <td>{$vo.name}</td>

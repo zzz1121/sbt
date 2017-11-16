@@ -68,12 +68,12 @@ class Callback extends Index
             if(!empty($res)){
                 $this->returnMsg['message']="订单已处理";
                 $this->log_write('shangfu_log','订单已处理');
-                return $this->returnMsg;
+                return 'SUCCESS';
             }
-            if( $order['order_status']!=="PROCESSING" || $order['order_status']=="FAIL"){
+            if( $order['order_status']!=="PROCESSING" || $order['order_status']=="SUCCESS"){
                 $this->returnMsg['message']="订单已处理";
                 $this->log_write('shangfu_log','订单已处理');
-                return $this->returnMsg;
+                return 'SUCCESS';
             }
 
 

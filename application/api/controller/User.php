@@ -30,6 +30,7 @@ class User extends Online
             //$this->returnMsg['message']=$merchant_data['balance'];
             //return $this->returnMsg;
             //未结算分润
+            $this->sye_rate=db('rate')->where('pay_prot_id',1)->find();
 			if($this->sye_rate['period']==0){
                 $period_time=0;
             }else{
@@ -52,13 +53,17 @@ class User extends Online
             $balance=db('commission')
                 ->where('user_id',$user_id)
                 ->sum('commission_money');
+
             //已提现余额
             $withdraw_count=db('pay_orders')
                 ->where('user_id',$user_id)
-                ->where('pay_status',"PAY_SUCCESS")
-                ->whereOr('pay_status','PAY_SUBMIT')
-                ->sum('pay_money');
+                ->where('pay_status','<>',"PAY_FAILURE")
+                ->sum('pay_money+pay_service');
 
+            //更新余额
+            $res=model('user')
+                ->where('user_id',$user_id)
+                ->setField('balance',$balance-$withdraw_count);
             $balance_count=$balance-$withdraw_count-($not_account);
             if($balance_count<0)$balance_count=0;
             if($balance_count<0){
@@ -218,27 +223,27 @@ class User extends Online
     }
     //分润提现
     public function advance(){
-		 $this->returnMsg['message'] = '接口更新，请稍候再试';
-                return $this->returnMsg;
-		$hour=date('H',time());
-        if($hour<10 || $hour>21){
+        $hour=date('H',time());
+        if($hour<10 || $hour>22){
             $this->returnMsg['message']="请在 10:00 ~ 22:00 时间段内进行提现操作";
             return $this->returnMsg;
         }
-		
+
         if(request()->isPost()){
-			if(empty($this->online['debit_card'])){
-				$this->returnMsg['message']='尚未绑定收款卡，无法提现';
+            if(empty($this->online['debit_card'])){
+                $this->returnMsg['message']='尚未绑定收款卡，无法提现';
                 return $this->returnMsg;
-			}
-			
+            }
+
             $user_id=input('post.phone');
+
             $advance_amount=input('advance_amount/d');
             if(empty($advance_amount) ){
                 $this->returnMsg['message']='分润提现金额不能为空';
                 return $this->returnMsg;
             }
-			$service=2;
+            $service=2;
+
 
 
             $merchant_data=model('user')
@@ -252,23 +257,13 @@ class User extends Online
                 $this->returnMsg['message']='银行卡数据请求失败，请稍后再试';
                 return $this->returnMsg;
             }
-            if($this->sye_rate['period']==0){
-                $period_time=0;
-            }else{
-                $period_time=strtotime( $this->sye_rate['period'].'day' );
-            }
 
 
-            $not_account=Db::table('commission')
-                ->where('user_id',$user_id)
-                ->where('commission_time','>',(time()-$period_time))
-                ->where('commission_time','<',time())
-                ->sum('commission_money');
-            $not_account=empty($not_account)?0:(int)($not_account*100)/100;
+
+
 
             //可提现余额
-            $balance_count=$merchant_data['balance']-$not_account;
-            
+            $balance_count=$this->get_balance($user_id);
             if($advance_amount +$service > $balance_count) {
                 $this->returnMsg['message'] = '取现金额+手续费 大于当前可提现分润';
                 return $this->returnMsg;
@@ -294,15 +289,15 @@ class User extends Online
             $add_res=Db::table('pay_orders')
                 ->insert($pay_data);
 
-          
-			Vendor('hxpay.huixiangPay');
+
+            Vendor('hxpay.huixiangPay');
             $obj=new \PayAction();
             //请求汇享支付接口
             $merchant_data['order_id']=$order_id;
 
             $result= $obj->enchashment($this->online,$merchant_data,$advance_amount*100);
             $order_res=$result['data'];
-			if(empty($result)){
+            if(empty($result)){
                 db('pay_orders')
                     ->where('pay_order_id',$order_id)
                     ->setField('pay_status','PAY_FAILURE');
@@ -350,7 +345,7 @@ class User extends Online
                 ->update([
                     'pay_status'=>$order_res['resp_code'],
                     'pay_order_id'=>$result['client_trans_id']
-                    ]);
+                ]);
             if($order_res['resp_code'] =='PAY_FAILURE' ){
                 $user_res=db('user')
                     ->where('user_id',$this->online['user_id'])
@@ -367,7 +362,7 @@ class User extends Online
             return $this->returnMsg;
 
         }elseif(request()->isGet()){
-           
+
         }
     }
 	//获取分润体现记录

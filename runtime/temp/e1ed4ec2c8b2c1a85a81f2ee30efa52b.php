@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:80:"/Applications/MAMP/htdocs/start/sbt/application/index2/view/brokerage/index.html";i:1510038830;s:78:"/Applications/MAMP/htdocs/start/sbt/application/index2/view/common/header.html";i:1509590836;s:78:"/Applications/MAMP/htdocs/start/sbt/application/index2/view/common/footer.html";i:1507794459;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:80:"/Applications/MAMP/htdocs/start/sbt/application/index2/view/brokerage/index.html";i:1510038830;s:78:"/Applications/MAMP/htdocs/start/sbt/application/index2/view/common/header.html";i:1510644878;s:78:"/Applications/MAMP/htdocs/start/sbt/application/index2/view/common/footer.html";i:1507794459;}*/ ?>
 <!DOCTYPE html>
 
 
@@ -94,7 +94,13 @@
                 <!--</dl>-->
             <!--</li>-->
             <li class="layui-nav-item">
-                <a href="javascript:void(0);">签约代理商&nbsp;&nbsp;</a>
+                <a href="javascript:void(0);">
+                    <?php if($user_data['user_type'] == 1): ?>
+                    用户等级:<?php echo $role_data[$user_data['role_id']-1]['role_name']; endif; if($user_data['user_type'] == 2): ?>
+                    用户等级:
+                    <?php if($user_data['is_merchant'] == 2): ?>签约代理商<?php endif; endif; ?>
+
+                    &nbsp;&nbsp;</a>
                 <dl class="layui-nav-child">
                     <dd><a href="<?php echo url('personal/info'); ?>">个人设置</a></dd>
                     <dd><a href="<?php echo url('publics/logout'); ?>">退出登陆</a></dd>
