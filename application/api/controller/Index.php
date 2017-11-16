@@ -214,21 +214,22 @@ class Index extends Controller
             $share_money=bcmul( $order['order_money'], $sye_rate['parent'],2 );
             $rate_money=0;
             if($parent['role_id']>1){
-                $parent_rate=$this->get_settle($order['pay_prot_id'],$user['user_id']);
+                $parent_rate=$this->get_settle($order['pay_prot_id'],$parent['user_id']);
             }
-            if($user_rate-$parent_rate>0){
-                $rate_money=bcmul( $order['order_money'], ($user_rate-$parent_rate),2 );
+            $rate_tatal=$user_rate['settle_rate']-$parent_rate['settle_rate'];
+            if($rate_tatal>0){
+                $rate_money=bcmul( $order['order_money'], ($rate_tatal),2 );
             }
 
             $res=Db::table('user')
                 ->where("user_id",$parent['user_id'])
-                ->inc('balance',$share_money)
+                ->inc('balance',($share_money+$rate_money))
                 ->inc('integral',$order['order_money'])
                 ->update();
             Db::table('commission')
                 ->insert([
                     'order_id'=>$order['order_id'],
-                    'commission_money'=>$share_money,
+                    'commission_money'=>($share_money+$rate_money),
                     'order_money'=>$order['order_money'],
                     'user_id'=>$parent['user_id'],
                     'rate_money'=>$rate_money,
@@ -245,22 +246,23 @@ class Index extends Controller
 
                 $rate_money=0;
                 if($parent['role_id']>1){
-                    $superior_rate=$this->get_settle($order['pay_prot_id'],$user['user_id']);
+                    $superior_rate=$this->get_settle($order['pay_prot_id'],$superior['user_id']);
                 }
-                if($user_rate-$superior_rate>0){
-                    $rate_money=bcmul( $order['order_money'], ($user_rate-$superior_rate),2 );
+                $superior_rate_total=$parent_rate['settle_rate']-$superior_rate['settle_rate'];
+                if($superior_rate_total>0){
+                    $rate_money=bcmul( $order['order_money'], $superior_rate_total,2 );
                 }
-
+                $balance_total=$rate_money+$superior_balance;
                 $res=Db::table('user')
                     ->where("user_id",$superior['user_id'])
-                    ->inc('balance',$superior_balance)
+                    ->inc('balance',$balance_total)
                     ->inc('integral',$order['order_money'])
                     ->update();
 
                 Db::table('commission')
                     ->insert([
                         'order_id'=>$order['order_id'],
-                        'commission_money'=>$superior_balance,
+                        'commission_money'=>$balance_total,
                         'share_money'=>$superior_balance,
                         'rate_money'=>$rate_money,
                         'order_money'=>$order['order_money'],

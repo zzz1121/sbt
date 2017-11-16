@@ -67,26 +67,26 @@
           <p class="layui-form-span">{$user['balance_count']}元</p>
         </div>
       </div>
-      {volist name="rate" id="value"}
-      <div class="layui-form-item">
-        <label class="layui-form-label">{$value.pay_name}</label>
-        <input type="hidden" name="pay_id[]"
-               value="{$value.pay_prot_id}" lay-verify="required" autocomplete="off">
-        <div class="layui-input-inline w300">
-          <input type="text" class="layui-input " name="settle_rate[]"
-                 value="{$value.settle_rate*100}" lay-verify="required" autocomplete="off" placeholder="请输入通道费率">
-        </div>
-        <div class="layui-form-mid layui-word-aux">平台提现费率,单位：%<br/>"0.003” 代表费率千分之3,不可输入整数</div>
-      </div>
-      <div class="layui-form-item">
-        <label class="layui-form-label">平台提现服务费</label>
-        <div class="layui-input-inline w300">
-          <input type="text" class="layui-input " name="extra_rate[]"
-                 value="{$value.extra_rate/100}" lay-verify="required" autocomplete="off" placeholder="请输入通道服务费">
-        </div>
-        <div class="layui-form-mid layui-word-aux">平台提现服务费,单位：元（精确到分）<br/></div>
-      </div>
-      {/volist}
+      <!--{volist name="rate" id="value"}-->
+      <!--<div class="layui-form-item">-->
+        <!--<label class="layui-form-label">{$value.pay_name}</label>-->
+        <!--<input type="hidden" name="pay_id[]"-->
+               <!--value="{$value.pay_prot_id}" lay-verify="required" autocomplete="off">-->
+        <!--<div class="layui-input-inline w300">-->
+          <!--<input type="text" class="layui-input " name="settle_rate[]"-->
+                 <!--value="{$value.settle_rate*100}" lay-verify="required" autocomplete="off" placeholder="请输入通道费率">-->
+        <!--</div>-->
+        <!--<div class="layui-form-mid layui-word-aux">平台提现费率,单位：%<br/>"0.003” 代表费率千分之3,不可输入整数</div>-->
+      <!--</div>-->
+      <!--<div class="layui-form-item">-->
+        <!--<label class="layui-form-label">平台提现服务费</label>-->
+        <!--<div class="layui-input-inline w300">-->
+          <!--<input type="text" class="layui-input " name="extra_rate[]"-->
+                 <!--value="{$value.extra_rate/100}" lay-verify="required" autocomplete="off" placeholder="请输入通道服务费">-->
+        <!--</div>-->
+        <!--<div class="layui-form-mid layui-word-aux">平台提现服务费,单位：元（精确到分）<br/></div>-->
+      <!--</div>-->
+      <!--{/volist}-->
 
 
       <!--<div class="layui-form-item">-->
