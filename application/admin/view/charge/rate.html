@@ -87,6 +87,14 @@
         <div class="layui-form-mid layui-word-aux">订单所需服务费用<br/>输入小数为订单百分比收费,输入整数位按固定值收取,单位:分</div>
       </div>
       <div class="layui-form-item">
+        <label class="layui-form-label">服务费成本</label>
+        <div class="layui-input-inline w300">
+          <input type="text" class="layui-input field-title" name="extra_rate"
+                 value="{$rate_data['extra_rate_cost']}" lay-verify="required" autocomplete="off" placeholder="订单所需服务费用">
+        </div>
+        <div class="layui-form-mid layui-word-aux">订单所需服务费用<br/>输入小数为订单百分比收费,输入整数位按固定值收取,单位:分</div>
+      </div>
+      <div class="layui-form-item">
         <label class="layui-form-label">最低限额</label>
         <div class="layui-input-inline w300">
           <input type="text" class="layui-input field-title" name="min_money"

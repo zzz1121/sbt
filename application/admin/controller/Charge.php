@@ -71,6 +71,8 @@ class Charge extends Online
                 $this->returnMsg['message']='请选择修改通道';
                 return $this->returnMsg;
             }
+
+
             $save_data=input('post.');
 
             $admin=Db::table('rate')
