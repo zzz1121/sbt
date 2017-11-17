@@ -31,14 +31,14 @@ class User extends Online
             //return $this->returnMsg;
             //未结算分润
             $this->sye_rate=db('rate')->where('pay_prot_id',1)->find();
-			if($this->sye_rate['period']==0){
+            if($this->sye_rate['period']==0){
                 $period_time=0;
             }else{
                 $period_time=strtotime( $this->sye_rate['period'].'day' );
             }
 
 
-			//不可提现余额
+            //不可提现余额
             $not_account=Db::table('commission')
                 ->where('user_id',$user_id)
                 ->where('commission_time','>',(time()-$period_time))
@@ -75,6 +75,7 @@ class User extends Online
 
             $this->returnMsg['data']['integral']=$merchant_data['integral'];
             $this->returnMsg['data']['underling']=$merchant_data['underling'];
+            $this->returnMsg['data']['indirect']=$merchant_data['indirect'];
 
             $this->returnMsg['data']['not_account']=$not_account;
             $this->returnMsg['data']['balance_count']=$balance_count;
@@ -126,8 +127,8 @@ class User extends Online
                 //->fetchSql(true)
                 ->find()['sum'];
 
-				
-			if($this->sye_rate['period']==0){
+
+            if($this->sye_rate['period']==0){
                 $period_time=0;
             }else{
                 $period_time=strtotime( $this->sye_rate['period'].'day' );
@@ -365,46 +366,46 @@ class User extends Online
 
         }
     }
-	//获取分润体现记录
-	public function get_pay_orders(){
-		 $page=input('page',1);
+    //获取分润体现记录
+    public function get_pay_orders(){
+        $page=input('page',1);
 
 
-		$page=!empty(input('page'))?input('page'):1;
-		$start_count=($page-1)* config('api_page_count');
-		$lists=Db::table('pay_orders')
-			->alias('a')
-			//->join('user_card b','a.pay_to_card=b.card_id')
-			->where('a.user_id',$this->online['user_id'])
-			->limit($start_count,config('api_page_count'))
-			//->field('a.*,b.bank_name')
-			->field('a.*')
-			->order('a.pay_time desc')
-			->select();
-		foreach($lists as $key =>$val){
-			$lists[$key]['pay_time']=date('Y-m-d H:i:s',$val['pay_time']);
-			$lists[$key]['pay_to_card']=substr($val['pay_to_card'],-4);
-			 if($lists[$key]['pay_status']=="PAY_FAILURE"){
-				$lists[$key]['pay_status']="下单失败";
-			}elseif($lists[$key]['pay_status']=="PAY_SUBMIT"){
-				$lists[$key]['pay_status']="处理中";
-			}else{
-				$lists[$key]['pay_status']="提现成功";
-			}
-			unset($lists[$key]['user_id']);
-			unset($lists[$key]['id']);
-		}
-		$this->returnMsg['end_page']=0;
-		if(count($lists)<config('api_page_count')){
-			$this->returnMsg['end_page']=1;
-		}
-		$this->returnMsg['data']['page']=$page;
-		$this->returnMsg['data']['list']=$lists;
-		$this->returnMsg['message']='请求成功';
+        $page=!empty(input('page'))?input('page'):1;
+        $start_count=($page-1)* config('api_page_count');
+        $lists=Db::table('pay_orders')
+            ->alias('a')
+            //->join('user_card b','a.pay_to_card=b.card_id')
+            ->where('a.user_id',$this->online['user_id'])
+            ->limit($start_count,config('api_page_count'))
+            //->field('a.*,b.bank_name')
+            ->field('a.*')
+            ->order('a.pay_time desc')
+            ->select();
+        foreach($lists as $key =>$val){
+            $lists[$key]['pay_time']=date('Y-m-d H:i:s',$val['pay_time']);
+            $lists[$key]['pay_to_card']=substr($val['pay_to_card'],-4);
+            if($lists[$key]['pay_status']=="PAY_FAILURE"){
+                $lists[$key]['pay_status']="下单失败";
+            }elseif($lists[$key]['pay_status']=="PAY_SUBMIT"){
+                $lists[$key]['pay_status']="处理中";
+            }else{
+                $lists[$key]['pay_status']="提现成功";
+            }
+            unset($lists[$key]['user_id']);
+            unset($lists[$key]['id']);
+        }
+        $this->returnMsg['end_page']=0;
+        if(count($lists)<config('api_page_count')){
+            $this->returnMsg['end_page']=1;
+        }
+        $this->returnMsg['data']['page']=$page;
+        $this->returnMsg['data']['list']=$lists;
+        $this->returnMsg['message']='请求成功';
 
-		$this->returnMsg['status']=200;
-		return $this->returnMsg;
-	}
+        $this->returnMsg['status']=200;
+        return $this->returnMsg;
+    }
 
 //    public function advance(){
 //        if(request()->isPost()){
