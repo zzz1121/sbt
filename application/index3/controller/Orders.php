@@ -1,5 +1,5 @@
 <?php
-namespace app\index2\controller;
+namespace app\index3\controller;
 use think\Controller;
 use think\Config;
 use think\Db;
@@ -44,13 +44,16 @@ class Orders extends Online
         }else{
             $where_data.="and b.group_id='".$this->user_id."'";
         }
-
+        $merchant_id=$this->user_id;
 
         $count=Db::table('orders')
             ->alias('a')
             ->join('user b','a.user_id=b.user_id')
             ->field('count(order_id) as count')
             ->where($where_data)
+            ->whereOr('merchant_id','IN',function($query)use($merchant_id) {
+                $query->table('user')->where('merchant_id',"$merchant_id")->field('user_id');
+            })
             ->whereOr('a.user_id',$this->user_id)
             ->find()['count'];
         $list=[];
@@ -60,6 +63,9 @@ class Orders extends Online
                 ->alias('a')
                 ->join('user b','a.user_id=b.user_id')
                 ->where($where_data)
+                ->whereOr('merchant_id','IN',function($query)use($merchant_id) {
+                    $query->table('user')->where('merchant_id',"$merchant_id")->field('user_id');
+                })
                 ->whereOr('a.user_id',$this->user_id)
                 ->order('order_time '.$this->sort)
                 ->paginate(10,$count,[

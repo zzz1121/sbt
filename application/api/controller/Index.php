@@ -81,6 +81,40 @@ class Index extends Controller
         }
         return $str;
     }
+    //刷新用户费率
+    public function change_settle_rate($user,$rate){
+
+        $reg_data = [
+            'sp_id' => config('sp_id'),
+            'mcht_no' => $this->online['mcht_no_1'],
+            'busi_type' => 'EPAYS',
+            'settle_type' => 'REAL_PAY',
+            'settle_rate' => $this->settle_rate,
+            'extra_rate_type' => "AMOUNT",
+            'extra_rate' => $this->sye_rate['extra_rate'],
+            'nonce_str' => $this->random(4, 1)
+        ];
+        //$this->returnMsg['reg_data']=$reg_data;
+        //$this->returnMsg['key']=config('sbt_key');
+        $reg_data = $this->sbt_sign($reg_data,config('sbt_key'));
+        $url = config('sbt_api_url'). '/gate/msvr/busiratemodify';
+        $result_reg = $this->curl_allinfo($url, false, $reg_data['data']);
+        if(empty($result_reg)){
+            $this->returnMsg['message'] = '系统繁忙，请稍候再试';
+            return 401;
+        }
+        if ($result_reg->status !== 'SUCCESS') {
+            $this->returnMsg['message'] = $result_reg->message;
+            //return $this->returnMsg;
+            return 401;
+        }
+        if($result_reg->result_code!=="SUCCESS"){
+            $this->returnMsg['message'] = $result_reg->err_msg;
+            //return $this->returnMsg;
+            return 401;
+        }
+        return 200;
+    }
 
     //log记录
     public function log_write($file_name,$message){
@@ -142,7 +176,7 @@ class Index extends Controller
         return $balance_count;
     }
 
-
+    //获取用户通道费率
     public function get_settle($pay_id=1,$user_id){
         $user=model('user')
             ->where('user_id',$user_id)
@@ -264,11 +298,12 @@ class Index extends Controller
             $rate_money=0;
             if($parent['role_id']>1){
                 $parent_rate=$this->get_settle($order['pay_prot_id'],$parent['user_id']);
+                $rate_tatal=$user_rate['settle_rate']-$parent_rate['settle_rate'];
+                if($rate_tatal>0){
+                    $rate_money=bcmul( $order['order_money'], ($rate_tatal),2 );
+                }
             }
-            $rate_tatal=$user_rate['settle_rate']-$parent_rate['settle_rate'];
-            if($rate_tatal>0){
-                $rate_money=bcmul( $order['order_money'], ($rate_tatal),2 );
-            }
+
 
             $res=Db::table('user')
                 ->where("user_id",$parent['user_id'])
@@ -294,13 +329,14 @@ class Index extends Controller
                 $superior_balance=bcmul( $order['order_money'], $sye_rate['superior'] ,2);
 
                 $rate_money=0;
-                if($parent['role_id']>1){
+                if($superior['role_id']>1){
                     $superior_rate=$this->get_settle($order['pay_prot_id'],$superior['user_id']);
+                    $superior_rate_total=$parent_rate['settle_rate']-$superior_rate['settle_rate'];
+                    if($superior_rate_total>0){
+                        $rate_money=bcmul( $order['order_money'], $superior_rate_total,2 );
+                    }
                 }
-                $superior_rate_total=$parent_rate['settle_rate']-$superior_rate['settle_rate'];
-                if($superior_rate_total>0){
-                    $rate_money=bcmul( $order['order_money'], $superior_rate_total,2 );
-                }
+
                 $balance_total=$rate_money+$superior_balance;
                 $res=Db::table('user')
                     ->where("user_id",$superior['user_id'])

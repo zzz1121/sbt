@@ -5,7 +5,7 @@
  * Date: 2017/8/28
  * Time: 下午5:37
  */
-namespace app\index2\model;
+namespace app\index3\model;
 
 use think\Model;
 

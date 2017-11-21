@@ -158,7 +158,7 @@ class Callback extends Index
             ->find();
         if(!empty($commission)){
             $this->log_write('px_back','已入库');
-            return 'error';
+            return 'SUCCESS';
         }
 
 

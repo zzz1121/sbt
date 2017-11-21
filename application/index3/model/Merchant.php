@@ -5,16 +5,13 @@
  * Date: 2017/8/28
  * Time: 下午5:37
  */
-namespace app\index2\model;
+namespace app\index3\model;
 
 use think\Model;
 
-class User extends Model
+class Merchant extends Model
 {
     // 设置当前模型对应的完整数据表名称
-    protected $table = 'user';
-    
-    
-  
-    
+    protected $table = 'merchant';
+
 }

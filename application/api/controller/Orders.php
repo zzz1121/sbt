@@ -55,6 +55,9 @@ class Orders extends Online
             $this->returnMsg['message'] = "请在 " . $rate_data['start_time'] . " ~ " . $rate_data['end_time'] . "时间段内进行提现操作";
             return $this->returnMsg;
         }
+
+
+
         $mcht_data=db('user_pay_data')  //通道账号
         ->where('user_id',$this->online['user_id'])
             ->where('pay_id',$pay_prot_id)
@@ -165,7 +168,7 @@ class Orders extends Online
             if ($result->status !== 'SUCCESS') {
                 $orders_model['order_status'] = 'FAIL';
                 $orders_model->save();
-                $this->returnMsg['message'] = $result->message . "错误1";
+                $this->returnMsg['message'] = $result->message . "错误";
                 return $this->returnMsg;
             }
 
@@ -431,18 +434,23 @@ class Orders extends Online
             return $this->returnMsg;
         }
         if ($result->status !== 'SUCCESS') {
-            $this->returnMsg['message'] = $result->message.",请重新下单1";
+
+            $res=model('orders')
+                ->where('order_id',$order_id)
+                ->update(['order_status'=>$result->status]);
+            $this->returnMsg['message'] = $result->message.",请重新下单";
             return $this->returnMsg;
         }
         $order_status=$result->result_code;
 
+        $res=model('orders')
+            ->where('order_id',$order_id)
+            ->update(['order_status'=>$result->result_code]);
         $bank_name=model('user_card')
             ->where('card_id',$order['to_card'])
             ->field('bank_name')
             ->find()['bank_name'];
-        $res=model('orders')
-            ->where('order_id',$order_id)
-            ->update(['order_status'=>$result->result_code]);
+
         if($result->result_code=="SUCCESS" ){
             $user=$this->online;
             // 代理商抽成提取

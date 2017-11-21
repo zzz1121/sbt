@@ -131,9 +131,9 @@ class User extends Online {
                     'role_id'=>$role_id
 //                    'login_status'=>$status
                 ]);
-            $pay=input('pay_id/a');
-            $settle=input('settle_rate/a');
-            $extra=input('extra_rate/a');
+            $pay=input('pay_id/a',[]);
+            $settle=input('settle_rate/a',[]);
+            $extra=input('extra_rate/a',[]);
             foreach($pay as $key=>$val){
                 $rate=model('rate')
                     ->where('pay_prot_id',$val)
