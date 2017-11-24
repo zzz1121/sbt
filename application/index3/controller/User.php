@@ -19,12 +19,9 @@ class User extends Online {
         $card_status = input('card_status');
         $keyworld = input('keyworld');
         $user_role=input('role_id');
-
+        $where['ids']=array('>',0);
         if(!empty($card_status) && $card_status >-1){
             $where['card_status'] = $card_status;
-        }
-        if(!empty($user_role) && $user_role>-1){
-            $where['role_id'] = $user_role;
         }
         if (!empty($keyworld)) {
             if (preg_match("/^1[34578]{1}\d{9}$/", $keyworld)) {
@@ -37,42 +34,27 @@ class User extends Online {
             $where['reg_time']=array('>',strtotime($reg_time));
             $this->sort='asc';
         }
-        $where['merchant_id'] = $this->user_id;
-        if(session('role_id')>0){
 
-        }else{
-            $where['group_id'] = $this->user_id;
-        }
 
         if(session('role_id')>0){
             $merchant_id=(string)$this->user_id;
             $user_list_count = Db::table('user')
                 ->where('merchant_id','IN',function($query)use($merchant_id) {
-                    $query->table('user')->where('merchant_id',"$merchant_id")->field('user_id');
+                    $query->table('user')->where('merchant_id',"$merchant_id")->whereOr('merchant_id',$merchant_id)->field('user_id');
                 })
-                ->whereOr($where)
+                ->where($where)
                 ->count();
             $user_list = Db::table('user')
                 ->where('merchant_id','IN',function($query)use($merchant_id) {
-                    $query->table('user')->where('merchant_id',"$merchant_id")->field('user_id');
+                    $query->table('user')->where('merchant_id',"$merchant_id")->whereOr('merchant_id',$merchant_id)->field('user_id');
                 })
-                ->whereOr($where)
+                ->where($where)
                 ->order('reg_time '.$this->sort)->paginate(5, $user_list_count,[
-                'page' => input('param.page'),
-                'path'=>url('user/index').'?page=[PAGE]'."&card_status=".$card_status."&keyworld=".$keyworld."&role_id=".$user_role."&reg_time=".$reg_time
-            ]);
-        }else{
-
+                    'page' => input('param.page'),
+                    'path'=>url('user/index').'?page=[PAGE]'."&card_status=".$card_status."&keyworld=".$keyworld."&role_id=".$user_role."&reg_time=".$reg_time
+                ]);
         }
-//        $user_list_count = Db::table('user')
-//            ->where($where)
-//            ->fetchSql(1)
-//            ->count();
 //
-//        $user_list = Db::table('user')->where($where)->order('reg_time '.$this->sort)->paginate(5, $user_list_count,[
-//            'page' => input('param.page'),
-//            'path'=>url('user/index').'?page=[PAGE]'."&card_status=".$card_status."&keyworld=".$keyworld."&role_id=".$user_role."&reg_time=".$reg_time
-//        ]);
         $page = $user_list->render();
 
 
@@ -80,13 +62,13 @@ class User extends Online {
         $this->assign('user_list', $user_list);
 
         return $this->fetch();
-            
+
     }
 
     public  function info(){
-		 $this->redirect('user/index');
-		$user_id=session('user_id');
-		$user=model('user')
+        $this->redirect('user/index');
+        $user_id=session('user_id');
+        $user=model('user')
             ->where('user_id',$user_id)
             ->field('name,address,sex,number,balance,user_id,reg_time,underling,indirect,role_id,login_status')
             ->find();

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:78:"/Applications/MAMP/htdocs/start/sbt/application/admin/view/personal/index.html";i:1507795287;s:77:"/Applications/MAMP/htdocs/start/sbt/application/admin/view/common/header.html";i:1510106379;s:77:"/Applications/MAMP/htdocs/start/sbt/application/admin/view/common/footer.html";i:1509948237;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:78:"/Applications/MAMP/htdocs/start/sbt/application/admin/view/personal/index.html";i:1507795287;s:77:"/Applications/MAMP/htdocs/start/sbt/application/admin/view/common/header.html";i:1511420078;s:77:"/Applications/MAMP/htdocs/start/sbt/application/admin/view/common/footer.html";i:1509948237;}*/ ?>
 <!DOCTYPE html>
 
 
@@ -131,6 +131,7 @@
                     <dl class="layui-nav-child">
                         <dd><a class="admin-nav-item" href="<?php echo url('level/index'); ?>">会员等级</a></dd>
                         <dd><a class="admin-nav-item" href="<?php echo url('user/index'); ?>">会员列表</a></dd>
+                        <dd><a class="admin-nav-item" href="<?php echo url('usercard/index'); ?>">银行卡管理</a></dd>
                         <dd><a class="admin-nav-item" href="<?php echo url('merchant/audit'); ?>">升级审核</a></dd>
                     </dl>
                 </li>

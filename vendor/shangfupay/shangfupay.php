@@ -221,7 +221,7 @@ class ShangfuPay
     }
 
     //sbt 签名生成
-    protected function sbt_sign($post_data=null,$secret_key=NULL){
+    public function sbt_sign($post_data=null,$secret_key=NULL){
         $str='';
         if(!is_array($post_data)&&!is_object($post_data)){
             return false;

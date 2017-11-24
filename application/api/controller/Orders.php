@@ -31,10 +31,10 @@ class Orders extends Online
             return $this->returnMsg;
         }
         $money = (int)(input('money') * 100);
-        $account_time = input('account_time', 1);
-        $pay_prot_id = input('pay_prot_id', 1);
-        if (empty($pay_prot_id)) {
-            $pay_prot_id=$account_time+1;
+        $account_time = input('account_time', '');
+        $pay_prot_id = input('pay_prot_id', 2);
+        if (!empty($account_time)) {
+            $pay_prot_id=2;
         }
         $rate_data = $this->get_settle($pay_prot_id, $this->online['user_id']);
 
@@ -55,6 +55,13 @@ class Orders extends Online
             $this->returnMsg['message'] = "请在 " . $rate_data['start_time'] . " ~ " . $rate_data['end_time'] . "时间段内进行提现操作";
             return $this->returnMsg;
         }
+//        if($pay_prot_id==1){
+//            $pay_prot_id=2;
+//        }elseif($pay_prot_id==2){
+//            $pay_prot_id=3;
+//        }else{
+//            $pay_prot_id=1;
+//        }
 
 
 
@@ -270,19 +277,20 @@ class Orders extends Online
             //return $pay_res;
 
             if (empty($pay_res) || $pay_res['resp_code'] !== '000000') {
-                $this->returnMsg['message'] = "支付订单生成失败。";
+                $this->returnMsg['message'] = $pay_res['resp_msg'];
                 return $this->returnMsg;
             }
 
             $order_data['service'] = ceil( $money * $this->settle_rate );
 
 
-            $order_data['extra_rate'] = $rate_data['extra_rate'];
 
             if($order_data['service']<$rate_data['min_charge']){
+                $rate_data['extra_rate']-=(int)($rate_data['min_charge']-$order_data['service']);
 
-                $order_data['extra_rate']+=($rate_data['min_charge']-$order_data['service']);
+                $order_data['service']=$rate_data['min_charge'];
             }
+            $order_data['extra_rate'] = $rate_data['extra_rate'];
 
 
 

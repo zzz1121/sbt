@@ -46,7 +46,7 @@ class Publics extends Core
                 ->select();
             session('role_data',$role_data);
             session('user_id',$user_data['account']);
-            $this->returnMsg['url']=url('personal/index');
+            $this->returnMsg['url']=url('statement/index');
             $this->returnMsg['message']='登陆成功,页面跳转中';
             $this->returnMsg['status']=200;
             return $this->returnMsg;

@@ -38,9 +38,13 @@ class Callback extends Index
                 $this->log_write('shangfu_log','用户错误');
                 return $this->returnMsg;
             }
+            vendor('shangfupay.shangfupay');
+            $pay=new \Shangfupay();
+            $sign=$pay->sbt_sign($post_data,$mcht_data['secret_key']);
 
 
-            if ( empty($post_data) || empty($post_data['sign']) || $post_data['sign'] !== strtolower($this->sbt_sign($post_data,$mcht_data['secret_key'])['sign'])) {
+
+            if ( empty($post_data) || empty($post_data['sign']) || strtoupper($post_data['sign']) !== $sign['sign']) {
                 $this->returnMsg['message']="签名错误";
                 $this->log_write('shangfu_log','签名错误');
                 return $this->returnMsg;
@@ -68,12 +72,12 @@ class Callback extends Index
             if(!empty($res)){
                 $this->returnMsg['message']="订单已处理";
                 $this->log_write('shangfu_log','订单已处理');
-                return 'SUCCESS';
+                return 'yichuli';
             }
             if( $order['order_status']!=="PROCESSING" || $order['order_status']=="SUCCESS"){
                 $this->returnMsg['message']="订单已处理";
                 $this->log_write('shangfu_log','订单已处理');
-                return 'SUCCESS';
+                return 'yichuli';
             }
 
 
@@ -106,7 +110,7 @@ class Callback extends Index
             $this->returnMsg['message']="写入成功";
             $this->returnMsg['status']=200;
 
-            return $this->returnMsg;
+            return 'SUCCESS';
 
         }
     }
@@ -166,7 +170,7 @@ class Callback extends Index
 
 
 
-        return 'aaaaa';
+        return 'SUCCESS';
     }
 
 

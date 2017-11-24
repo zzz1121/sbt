@@ -14,7 +14,8 @@ class User extends Online {
         $role_id = Session::get('role_id');
         $reg_time=input('reg_time');
         $this->assign('role_id',$role_id);
-        $this->assign('role_data',session('role_data'));
+        $role_data=model('role')->select();
+        $this->assign('role_data',$role_data);
 
         $card_status = input('card_status');
         $keyworld = input('keyworld');
@@ -54,9 +55,9 @@ class User extends Online {
     }
 
     public  function info(){
-		 $this->redirect('user/index');
-		$user_id=session('user_id');
-		$user=model('user')
+        $this->redirect('user/index');
+        $user_id=session('user_id');
+        $user=model('user')
             ->where('user_id',$user_id)
             ->field('name,address,number,balance,user_id,reg_time,underling,indirect,role_id,login_status')
             ->find();
@@ -164,7 +165,7 @@ class User extends Online {
                             'user_id'=>$user_id,
                             'pay_id'=>$val,
                             'settle_rate'=>$settle[$key]/100,
-                             'extra_rate'=>$extra[$key]*100
+                            'extra_rate'=>$extra[$key]*100
                         ]);
                 }
             }

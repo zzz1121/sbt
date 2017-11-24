@@ -12,9 +12,16 @@ class Channel extends Online
             $data=Db::table('role_settle')
                 ->alias('a')
                 ->join('rate b','a.pay_id=b.pay_prot_id')
-                ->where('role_id',$this->online['role_id'])
-                ->field('a.settle_rate,a.extra_rate,b.parent,b.superior,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money,b.costing')
+                ->where('b.status',1)
+                ->where('a.role_id',$this->online['role_id'])
+                ->field('a.settle_rate,a.extra_rate,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money')
                 ->select();
+        }elseif($this->online['user_type']==1 && $this->online['role_id']==1 ){
+            $data = Db::table('rate')
+                ->field('pay_prot_id,rate_type,pay_name,settle_rate,extra_rate,min_charge,start_time,end_time,min_money,max_money')
+                ->where('status',1)
+                ->select();
+
         }elseif($this->online['is_merchant']==2){
             $data=Db::table('group_settle')
                 ->alias('a')
@@ -42,12 +49,6 @@ class Channel extends Online
                 ->where('b.status',1)
                 ->field('a.settle_rate,a.extra_rate,b.pay_prot_id,b.rate_type,b.pay_name,b.min_charge,b.start_time,b.end_time,b.min_money,b.max_money')
                 ->select();
-        }elseif($this->online['user_type']==1 ){
-            $data = Db::table('rate')
-                ->field('pay_prot_id,rate_type,pay_name,settle_rate,extra_rate,min_charge,start_time,end_time,min_money,max_money')
-                ->where('status',1)
-                ->select();
-
         }
 
         if(empty($data)){
@@ -65,12 +66,15 @@ class Channel extends Online
             }
         }
 
-
+        //$change_data[]=$data[1];
+        //$change_data[]=$data[2];
+        //$change_data[]=$data[0];
+        $change_data=$data;
 
 
         $this->returnMsg['status']=200;
         $this->returnMsg['message']='请求成功';
-        $this->returnMsg['data']=$data;
+        $this->returnMsg['data']=$change_data;
         return $this->returnMsg;
     }
 

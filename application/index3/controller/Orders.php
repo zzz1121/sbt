@@ -39,11 +39,7 @@ class Orders extends Online
             $where_data.=' and pay_prot_id='.$pay_prot_id;
         }
 
-        if(session('role_id')>0){
-            $where_data.="and b.merchant_id='".$this->user_id."'";
-        }else{
-            $where_data.="and b.group_id='".$this->user_id."'";
-        }
+
         $merchant_id=$this->user_id;
 
         $count=Db::table('orders')
@@ -51,10 +47,9 @@ class Orders extends Online
             ->join('user b','a.user_id=b.user_id')
             ->field('count(order_id) as count')
             ->where($where_data)
-            ->whereOr('merchant_id','IN',function($query)use($merchant_id) {
-                $query->table('user')->where('merchant_id',"$merchant_id")->field('user_id');
+            ->where('merchant_id','IN',function($query)use($merchant_id) {
+                $query->table('user')->where('merchant_id',"$merchant_id")->whereOr('user_id',$merchant_id)->field('user_id');
             })
-            ->whereOr('a.user_id',$this->user_id)
             ->find()['count'];
         $list=[];
         $page='';
@@ -63,10 +58,9 @@ class Orders extends Online
                 ->alias('a')
                 ->join('user b','a.user_id=b.user_id')
                 ->where($where_data)
-                ->whereOr('merchant_id','IN',function($query)use($merchant_id) {
-                    $query->table('user')->where('merchant_id',"$merchant_id")->field('user_id');
+                ->where('merchant_id','IN',function($query)use($merchant_id) {
+                    $query->table('user')->where('merchant_id',"$merchant_id")->whereOr('user_id',$merchant_id)->field('user_id');
                 })
-                ->whereOr('a.user_id',$this->user_id)
                 ->order('order_time '.$this->sort)
                 ->paginate(10,$count,[
                     'page' => input('param.page'),
@@ -87,21 +81,35 @@ class Orders extends Online
 
         //订单总金额
         $data['orders_total']=Db::table('orders')
-            ->where($where_data)
-            ->join('user b','a.user_id=b.user_id')
             ->alias('a')
+            ->join('user b','a.user_id=b.user_id')
+            ->field('count(order_id) as count')
+            ->where($where_data)
+            ->where('merchant_id','IN',function($query)use($merchant_id) {
+                $query->table('user')->where('merchant_id',"$merchant_id")->whereOr('user_id',$merchant_id)->field('user_id');
+            })
             ->sum('order_money');
 
         //成功订单数
         $data['success_count']=Db::table('orders')
             ->alias('a')
             ->join('user b','a.user_id=b.user_id')
+            ->field('count(order_id) as count')
+            ->where($where_data)
+            ->where('merchant_id','IN',function($query)use($merchant_id) {
+                $query->table('user')->where('merchant_id',"$merchant_id")->whereOr('user_id',$merchant_id)->field('user_id');
+            })
             ->where($where_data.' and a.order_status="SUCCESS"')
             ->count();
         //成功订单金额
         $data['success_total']=Db::table('orders')
             ->alias('a')
             ->join('user b','a.user_id=b.user_id')
+            ->field('count(order_id) as count')
+            ->where($where_data)
+            ->where('merchant_id','IN',function($query)use($merchant_id) {
+                $query->table('user')->where('merchant_id',"$merchant_id")->whereOr('user_id',$merchant_id)->field('user_id');
+            })
             ->where($where_data.' and a.order_status="SUCCESS"')
             ->sum('order_money');
 
@@ -109,18 +117,33 @@ class Orders extends Online
         $data['falt_count']=Db::table('orders')
             ->alias('a')
             ->join('user b','a.user_id=b.user_id')
+            ->field('count(order_id) as count')
+            ->where($where_data)
+            ->where('merchant_id','IN',function($query)use($merchant_id) {
+                $query->table('user')->where('merchant_id',"$merchant_id")->whereOr('user_id',$merchant_id)->field('user_id');
+            })
             ->where($where_data.' and a.order_status!="SUCCESS"')
             ->count();
         //失败订单金额
         $data['falt_total']=Db::table('orders')
             ->alias('a')
             ->join('user b','a.user_id=b.user_id')
+            ->field('count(order_id) as count')
+            ->where($where_data)
+            ->where('merchant_id','IN',function($query)use($merchant_id) {
+                $query->table('user')->where('merchant_id',"$merchant_id")->whereOr('user_id',$merchant_id)->field('user_id');
+            })
             ->where($where_data.' and a.order_status!="SUCCESS"')
             ->sum('order_money');
         //结算金额
         $data['into_total']=Db::table('orders')
             ->alias('a')
             ->join('user b','a.user_id=b.user_id')
+            ->field('count(order_id) as count')
+            ->where($where_data)
+            ->where('merchant_id','IN',function($query)use($merchant_id) {
+                $query->table('user')->where('merchant_id',"$merchant_id")->whereOr('user_id',$merchant_id)->field('user_id');
+            })
             ->where($where_data.' and a.order_status="SUCCESS"')
             ->sum('arrival_amount');
         $seach='?';

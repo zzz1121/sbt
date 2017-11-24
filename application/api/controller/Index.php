@@ -296,8 +296,8 @@ class Index extends Controller
                 ->find();
             $share_money=bcmul( $order['order_money'], $sye_rate['parent'],2 );
             $rate_money=0;
+            $parent_rate=$this->get_settle($order['pay_prot_id'],$parent['user_id']);
             if($parent['role_id']>1){
-                $parent_rate=$this->get_settle($order['pay_prot_id'],$parent['user_id']);
                 $rate_tatal=$user_rate['settle_rate']-$parent_rate['settle_rate'];
                 if($rate_tatal>0){
                     $rate_money=bcmul( $order['order_money'], ($rate_tatal),2 );
@@ -329,8 +329,9 @@ class Index extends Controller
                 $superior_balance=bcmul( $order['order_money'], $sye_rate['superior'] ,2);
 
                 $rate_money=0;
+                $superior_rate=$this->get_settle($order['pay_prot_id'],$superior['user_id']);
                 if($superior['role_id']>1){
-                    $superior_rate=$this->get_settle($order['pay_prot_id'],$superior['user_id']);
+
                     $superior_rate_total=$parent_rate['settle_rate']-$superior_rate['settle_rate'];
                     if($superior_rate_total>0){
                         $rate_money=bcmul( $order['order_money'], $superior_rate_total,2 );
@@ -758,9 +759,43 @@ class Index extends Controller
         }
         return false;
     }
+    public function get_order(){
+        $post_data = [
+            'sp_id' => '1086-2',
+            'mch_id' => '108650000000236',
+            'out_trade_no' => '20171111192050',
 
+            'nonce_str' => $this->random(4, 1)
+        ];
 
+        $url = config('sbt_api_url') . '/gate/spsvr/trade/qry';
+        $bodys = $this->sbt_sign($post_data, 'B4D742B3434B478DBD82BE355383EAC6')['data'];
+        $result = $this->http($url, false, $bodys);
+        return $result;
+    }
 
-
+//curl调用
+    function http($urls, $header = NULL, $post = FALSE){
+        $url = is_array($urls) ? $urls['0'] : $urls;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        //带header方式提交
+        if(!empty($header)){
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        }
+        //post提交方式
+        if($post != FALSE){
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        }
+        if(is_array($urls)){
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        }
+        $data = curl_exec($ch);
+        curl_close($ch);
+        return json_decode($data);
+    }
 
 }

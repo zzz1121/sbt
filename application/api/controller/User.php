@@ -77,8 +77,8 @@ class User extends Online
             $this->returnMsg['data']['underling']=$merchant_data['underling'];
             $this->returnMsg['data']['indirect']=$merchant_data['indirect'];
 
-            $this->returnMsg['data']['not_account']=$not_account;
-            $this->returnMsg['data']['balance_count']=$balance_count;
+            $this->returnMsg['data']['not_account']=(int)($not_account*100)/100;
+            $this->returnMsg['data']['balance_count']=(int)($balance_count*100)/100;
 
             $this->returnMsg['message']='请求成功';
 
